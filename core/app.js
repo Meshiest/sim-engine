@@ -249,27 +249,45 @@ function setScene(scene) {
   }
   var scene = assets.scene[scene];
   $('#gameScreen').attr('style', scene.style)
-  $('#char.left').attr('style', '')
-  $('#char.right').attr('style', '')
-  $('#char.center').attr('style', '')
+  for(var name in gameStage) {
+    exitCharacter(name, true);
+  }
   nextLine();
 }
 
 function enterCharacter(char, loc) {
+  if(gameStage[char]) {
+    showError("Character already on stage", "For reasons, we can't display the same character twice")
+    return;
+  }
+
   if(!loc) {
     loc = "center";
   } else {
     loc = loc.toLowerCase();
   }
   gameStage[char] = loc;
-  $("#char."+loc).attr('style', 'background-image: url('+assets.character[char].bust.image.src+')');
+  $('#gameScreen').prepend(
+    $('<div id="char" class="show-'+loc+'" char="' + char + '">')
+      .attr('style', 'background-image: url('+assets.character[char].bust.image.src+')')
+  )
+
   nextLine();
 }
 
-function exitCharacter(char) {
+function exitCharacter(char, noNext) {
+  var loc = gameStage[char];
   delete gameStage[char];
-  $("#char."+loc).attr('style', '')
-  nextLine();
+  var char = $("#char[char='"+char+"']")
+    .removeClass('show-'+loc)
+    .addClass('hide-'+loc)
+
+  setTimeout(function() {
+    char.remove();
+  }, 1000);
+
+  if(!noNext)
+    nextLine();
 }
 
 var currMusic = undefined;

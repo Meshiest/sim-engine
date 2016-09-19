@@ -37,6 +37,16 @@ ENTER boy LEFT
 "Boy <%= ~~(Math.random()*20) %>": "Hello my name is ":boy: {numPlays}""
 $ %numPlays++
 boy: "I'm made of cheese inside"
+EXIT boy
+boy: "I can teleport"
+ENTER boy RIGHT
+boy: "See?!"
+EXIT boy
+boy: "Magic!"
+ENTER boy
+boy: "wow!"
+EXIT boy
+ENTER boy LEFT
 ENTER shark RIGHT
 shark: "I love you, player"
 you: "Um..."
@@ -56,22 +66,21 @@ boy: "ok"
 GOTO start
 
 POINT games
-SCENE plains
-you: "I wanna play some games"
 EXIT shark
 EXIT boy
+SCENE plains
+you: "I wanna play some games"
 ENTER creep
 creep: "I will fuck you"
 SCENE beach
 ENTER creep LEFT
-ENTER creep RIGHT
 you: "oh... ok"
 GOTO start
 
 POINT candy
 SCENE beach
-ENTER shark LEFT
 EFFECT slap
+ENTER shark LEFT
 shark: "I am ur #1 fan"
 EFFECT slap
 shark: "My name is smitty werbenjagermanjensen"
