@@ -1,0 +1,23 @@
+{
+  "name": "sim-engine",
+  "version": "1.0.0",
+  "description": "A Dating Sim Engine",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/meshiest/sim-engine.git"
+  },
+  "keywords": [
+    "dating",
+    "simulator",
+    "game engine"
+  ],
+  "author": "Meshiest",
+  "homepage": "https://github.com/meshiest/sim-engine#readme",
+  "devDependencies": {
+    "electron": "^1.3.4"
+  }
+}

@@ -1,0 +1,90 @@
+# script main.js
+# style style.css
+
+image background beach beach.jpg
+image background lake lake.jpg
+image background plains plains.jpg
+
+image bust boy boy.jpg
+image bust creep creeper.jpg
+image bust girl girl.jpg
+
+audio effect slap slap.mp3
+audio music badass badass.mp3
+audio music school school.mp3
+
+scene black color #000000
+scene beach background beach
+scene lake background lake
+scene plains background plains
+
+character boy boy "John Smith"
+character shark girl "Sharkeesha"
+character creep creep "Creeper"
+
+$ %numPlays=1
+
+POINT start
+SCENE lake
+MUSIC school
+ENTER boy LEFT
+
+# <%= "use the return value in the line" %>
+# <% just execute code inline %>
+# $ execute code and change %variables
+# character: "Hello, I can say {variables} my name is :character:"
+
+"Boy <%= ~~(Math.random()*20) %>": "Hello my name is ":boy: {numPlays}""
+$ %numPlays++
+boy: "I'm made of cheese inside"
+ENTER shark RIGHT
+shark: "I love you, player"
+you: "Um..."
+MUSIC STOP
+MENU "What do you do?"
+  "Fuck" -> GOTO fuck
+  "Play DnD" -> GOTO games
+  "Eat Candy" -> GOTO candy
+ENDMENU
+
+POINT fuck
+MUSIC badass
+you: "Fuck me right here and now"
+MUSIC STOP
+SCENE black
+boy: "ok"
+GOTO start
+
+POINT games
+SCENE plains
+you: "I wanna play some games"
+EXIT shark
+EXIT boy
+ENTER creep
+creep: "I will fuck you"
+SCENE beach
+ENTER creep LEFT
+ENTER creep RIGHT
+you: "oh... ok"
+GOTO start
+
+POINT candy
+SCENE beach
+ENTER shark LEFT
+EFFECT slap
+shark: "I am ur #1 fan"
+EFFECT slap
+shark: "My name is smitty werbenjagermanjensen"
+EFFECT slap
+shark: "make sure you take ur meds"
+EFFECT slap
+shark: "otherwise I hate u"
+EFFECT slap
+shark: "asshole"
+you: "oh"
+shark: "pls send n00dz"
+shark: "tits or gtfo"
+SCENE black
+talk: "And no one knew what happened..."
+talk: "... until the 2nd holocaust"
+GOTO start

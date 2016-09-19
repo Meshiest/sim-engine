@@ -1,0 +1,173 @@
+* {
+  font-family: Tahoma, Helvetica, sans-serif;
+}
+
+body, html, #loadScreen, #errorScreen, #gameScreen {
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+.hidden {
+  visibility: hidden;
+  display: none !important;
+}
+
+#loadScreen {
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#loadScreen #loadText {
+  color: #eee;
+  font-size: 5em;
+  animation: loadScreenPulse 2s ease-in-out alternate infinite;
+}
+
+#loadScreen #resourceName {
+  color: #aae;
+}
+
+#errorScreen {
+  padding: 1em;
+  background: #faa;
+  overflow-y: auto;
+}
+
+#errorScreen #errorHeader {
+  font-size: 2em;
+}
+
+#errorScreen #errorBody {
+  font-size: 1em;
+}
+
+#gameScreen {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 1em;
+  padding: 1em;
+  height: 10em;
+  width: 100vw auto;
+  border-radius: 1em;
+  background: linear-gradient(rgba(240, 240, 255, 0.8), rgba(200, 200, 255, 0.7));
+  border: thick solid white;
+}
+
+#char {
+  width: 33.33vw;
+  height: 100vh;
+  position: absolute;
+  display: inline;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+#char.left {
+  left: 0;
+}
+
+#char.center {
+  left: 33.33vw;
+}
+
+#char.right {
+  right: 0;
+}
+
+#textBox {
+  color: #fff;
+  text-shadow: 0 0 0.2em #000;
+}
+
+#textBox #textName {
+  font-size: 1.5em;
+}
+
+#textBox p#textBody {
+  font-size: 1em;
+}
+
+#nextButton {
+  position: absolute;
+  width: 10em;
+  height: 3em;
+  margin: auto;
+  background: 0;
+  font-size: 1em;
+  font-weight: bold;
+  color: #fff;
+  border: medium solid white;
+  border-radius: 0.5em;
+  outline: none;
+  bottom: 1em;
+  right: 1em;
+
+  transition: background 0.5s;
+}
+
+#nextButton:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+#menuBox {
+  color: #fff;
+  text-shadow: 0 0 0.2em #000;
+}
+
+#menuBox #boxName {
+}
+
+#menuBox .menu {
+  padding: 0;
+  border-radius: 1em;
+  border: thick solid white;
+}
+
+#menuBox .menu li {
+  list-style-type: none;
+  transition: background-color 0.5s, box-shadow 0.5s;
+  background-color: rgba(0, 0, 0, 0.15);
+  padding: 0.5em;
+}
+
+#menuBox .menu li:nth-child(2) {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+#menuBox .menu li:first-child {
+  border-top-left-radius: 1em;
+  border-top-right-radius: 1em;
+}
+
+#menuBox .menu li:last-child {
+  border-bottom-left-radius: 1em;
+  border-bottom-right-radius: 1em;
+}
+
+#menuBox .menu li.selected {
+  background-color: rgba(200, 200, 200, 0.25);
+  /*box-shadow: 0 0 1em #000;*/
+}
+
+@keyframes loadScreenPulse {
+  0% {
+    text-shadow: 0 0 0.2em #eee;
+  }
+  100% {
+    text-shadow: 0 0 2em #aaa;
+  }
+}

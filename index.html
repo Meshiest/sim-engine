@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dating Sim</title>
+    
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+    <script src='core/jq.js'></script>
+    <script>if (window.module) module = window.module;</script>
+
+    <link rel='stylesheet' type='text/css' href='core/base.css'>
+  </head>
+  <body>
+    <section id='loadScreen'>
+      <div id='loadText'>
+        <span>Loading</span>
+        <span id='resourceName'>Game</span>
+      </div>
+    </section>
+
+    <section id='errorScreen' class='hidden'>
+      <h2 id='errorHeader'>
+        Error!
+      </h2>
+      <pre id='errorBody'>
+        No Body Defined
+      </pre>
+    </section>
+    
+    <section id='gameScreen' class='hidden'>
+      <div id='char' class='left'></div>
+      <div id='char' class='center'></div>
+      <div id='char' class='right'></div>
+      <div class='container'>
+        <div id='textBox' onclick='nextLine();'>
+          <div id='textName'>
+          </div>
+          <p id='textBody'>
+          </p>
+          <button id='nextButton'>&gt;&gt;&gt;</button>
+        </div>
+
+        <div id='menuBox' class='hidden'>
+          <div id='boxName'>
+          </div>
+          <ul class='menu'>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <script src='core/app.js'></script>
+  </body>
+</html>
