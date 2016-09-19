@@ -8,6 +8,7 @@ let mainWindow
 function createWindow () {
   mainWindow = new BrowserWindow({width: 800, height: 600, "node-integration": false})
   mainWindow.loadURL("file://" + __dirname + "/index.html?game=" + gameName)
+  mainWindow.setMenu(null);
 
   mainWindow.on('closed', function () {
     mainWindow = null
