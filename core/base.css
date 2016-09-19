@@ -84,9 +84,9 @@ body, html, #loadScreen, #errorScreen, #gameScreen {
   position: absolute;
   display: inline;
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: center bottom;
   background-size: contain;
-  transition: left 1s ease-in, right 1s ease-in, bottom 1s ease-in;
+  transition: left 1s ease-in-out, right 1s ease-in-out, bottom 1s ease-in-out;
 }
 
 #char.left {
@@ -104,7 +104,7 @@ body, html, #loadScreen, #errorScreen, #gameScreen {
 #char.show-center {
   bottom: 0vh;
   left: 33vw;
-  animation: showFromBottom 1s 1 ease-in;
+  animation: showFromBottom 1s 1 ease-in-out;
 }
 
 #char.hide-center {
@@ -124,7 +124,7 @@ body, html, #loadScreen, #errorScreen, #gameScreen {
 
 #char.show-right {
   right: 0vw;
-  animation: showFromRight 1s 1 ease-in;
+  animation: showFromRight 1s 1 ease-in-out;
 }
 
 #char.hide-right {
@@ -142,7 +142,7 @@ body, html, #loadScreen, #errorScreen, #gameScreen {
 
 #char.show-left {
   left: 0vw;
-  animation: showFromLeft 1s 1 ease-in;
+  animation: showFromLeft 1s 1 ease-in-out;
 }
 
 #char.hide-left {

@@ -52,11 +52,13 @@ WAIT 200
 boy: "really"@
 WAIT 200
 boy: "fast!"@
+TEXTBOX HIDE
 ENTER boy RIGHT
 WAIT 1000
 EXIT boy
 WAIT 1000
 ENTER boy
+TEXTBOX SHOW
 boy: "Magic!"
 EXIT boy
 WAIT 1000

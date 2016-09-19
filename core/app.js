@@ -400,6 +400,18 @@ function waitMS(time) {
   }, time);
 }
 
+function toggleTextbox(visible) {
+  if(visible === 'HIDE')
+    $('.container').fadeOut(200);
+  else if(visible === 'SHOW')
+    $('.container').fadeIn(200);
+  else {
+    showError("Invalid Input", "TEXTBOX requires SHOW or HIDE");
+    return;
+  }
+  nextLine();
+}
+
 function getDisplayName(char) {
   return assets.character[char].displayName;
 }
@@ -472,9 +484,6 @@ $('body').keydown(function(a){
       selectIndex = -1;
     }
   }
-
-
-  // 38 up 40 down
 })
 
 gameOperators = {
@@ -490,6 +499,7 @@ gameOperators = {
   "^EFFECT ([a-zA-Z0-9_]+)$": playEffect,
   "^GOTO ([a-zA-Z0-9_]+)$": gotoPoint,
   "^WAIT (\\d+)$": waitMS,
+  "^TEXTBOX (HIDE|SHOW)$": toggleTextbox,
   "^\\$(.*)$": evalLine,
 }
 
