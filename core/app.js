@@ -510,7 +510,6 @@ function interpretLine(rawLine) {
     var regex = new RegExp(pattern);
     var matches = line.match(regex);
     if(matches) {
-      console.log(line)
       matches.splice(0, 1);
       fn(...matches);
       return;
