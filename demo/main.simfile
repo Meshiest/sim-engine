@@ -37,15 +37,29 @@ ENTER boy LEFT
 "Boy <%= ~~(Math.random()*20) %>": "Hello my name is ":boy: {numPlays}""
 $ %numPlays++
 boy: "I'm made of cheese inside"
+boy: "I can teleport"@
+WAIT 2000
 EXIT boy
-boy: "I can teleport"
+WAIT 500
+boy: "and"@
+WAIT 200
+boy: "I"@
+WAIT 200
+boy: "can"@
+WAIT 200
+boy: "talk"@
+WAIT 200
+boy: "really"@
+WAIT 200
+boy: "fast!"@
 ENTER boy RIGHT
-boy: "See?!"
+WAIT 1000
 EXIT boy
-boy: "Magic!"
+WAIT 1000
 ENTER boy
-boy: "wow!"
+boy: "Magic!"
 EXIT boy
+WAIT 1000
 ENTER boy LEFT
 ENTER shark RIGHT
 shark: "I love you, player"

@@ -229,6 +229,7 @@ var gamePoints = {};
 var gameVars = {};
 var gameStage = {};
 var currGameLine = 0;
+var isWaiting = false;
 
 loadText("Game File")
 $.ajax({
@@ -311,12 +312,15 @@ function playEffect(effect) {
   nextLine();
 }
 
-function sendMessage(name, message) {
+function sendMessage(name, message, autoNext) {
   $('#textName').text(name);
   $('#textBody').text(message);
+
+  if(autoNext)
+    nextLine();
 }
 
-function charMessage(char, message) {
+function charMessage(char, message, autoNext) {
   if(char == 'you') {
     sendMessage("You", message)
     return;
@@ -324,7 +328,7 @@ function charMessage(char, message) {
     sendMessage("", message)
     return;
   }
-  sendMessage(getDisplayName(char), message);
+  sendMessage(getDisplayName(char), message, autoNext);
 }
 
 function showMenu(text) {
@@ -387,6 +391,15 @@ function evalLine(line) {
   nextLine();
 }
 
+function waitMS(time) {
+  var time = parseInt(time);
+  isWaiting = true;
+  setTimeout(function(){
+    isWaiting = false;
+    nextLine();
+  }, time);
+}
+
 function getDisplayName(char) {
   return assets.character[char].displayName;
 }
@@ -429,7 +442,7 @@ var selectIndex = -1;
 $('body').keydown(function(a){
   var key = a.keyCode;
 
-  if($('#gameScreen.hidden').length)
+  if($('#gameScreen.hidden').length || isWaiting)
     return;
 
   var menu = !!$('#textBox.hidden').length;
@@ -466,9 +479,9 @@ $('body').keydown(function(a){
 
 gameOperators = {
   // character operator
-  "^([a-zA-Z0-9_]+): \"(.+?)\"$": charMessage,
+  "^([a-zA-Z0-9_]+): \"(.+?)\"(@)?$": charMessage,
   // narrator operator
-  "^\"(.+?)\": \"(.+?)\"$": sendMessage,
+  "^\"(.+?)\": \"(.+?)\"(@)?$": sendMessage,
   "^ENTER ([a-zA-Z0-9_]+) *(LEFT|RIGHT|)?$": enterCharacter,
   "^EXIT ([a-zA-Z0-9_]+)$": exitCharacter,
   "^SCENE ([a-zA-Z0-9_]+)$": setScene,
@@ -476,6 +489,7 @@ gameOperators = {
   "^MUSIC ([a-zA-Z0-9_]+)$": setMusic,
   "^EFFECT ([a-zA-Z0-9_]+)$": playEffect,
   "^GOTO ([a-zA-Z0-9_]+)$": gotoPoint,
+  "^WAIT (\\d+)$": waitMS,
   "^\\$(.*)$": evalLine,
 }
 
@@ -496,6 +510,7 @@ function interpretLine(rawLine) {
     var regex = new RegExp(pattern);
     var matches = line.match(regex);
     if(matches) {
+      console.log(line)
       matches.splice(0, 1);
       fn(...matches);
       return;
