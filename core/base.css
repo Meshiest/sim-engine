@@ -2,6 +2,18 @@
   font-family: Tahoma, Helvetica, sans-serif;
 }
 
+/*Disable highlighting*/
+:not(input):not(textarea),
+:not(input):not(textarea)::after,
+:not(input):not(textarea)::before {
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: default;
+}
+input, button, textarea, :focus {
+    outline: none;
+}
+
 body, html, #loadScreen, #errorScreen, #gameScreen {
   overflow: hidden;
   margin: 0;
