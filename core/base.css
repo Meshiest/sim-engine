@@ -79,7 +79,7 @@ body, html, #loadScreen, #errorScreen, #gameScreen {
 }
 
 #char {
-  width: 33.33vw;
+  width: 50vw;
   height: 100vh;
   position: absolute;
   display: inline;
@@ -94,7 +94,7 @@ body, html, #loadScreen, #errorScreen, #gameScreen {
 }
 
 #char.center {
-  left: 33.33vw;
+  left: 25vw;
 }
 
 #char.right {
@@ -103,13 +103,13 @@ body, html, #loadScreen, #errorScreen, #gameScreen {
 
 #char.show-center {
   bottom: 0vh;
-  left: 33vw;
+  left: 25vw;
   animation: showFromBottom 1s 1 ease-in-out;
 }
 
 #char.hide-center {
   bottom: -100vh;
-  left: 33vw;
+  left: 25vw;
 }
 
 @keyframes showFromBottom {
@@ -128,12 +128,12 @@ body, html, #loadScreen, #errorScreen, #gameScreen {
 }
 
 #char.hide-right {
-  right: -34vw;
+  right: -51vw;
 }
 
 @keyframes showFromRight {
   from {
-    right: -34vw;
+    right: -51vw;
   }
   to {
     right: 0;
@@ -146,12 +146,12 @@ body, html, #loadScreen, #errorScreen, #gameScreen {
 }
 
 #char.hide-left {
-  left: -34vw;
+  left: -51vw;
 }
 
 @keyframes showFromLeft {
   from {
-    left: -34vw;
+    left: -51vw;
   }
   to {
     left: 0;
