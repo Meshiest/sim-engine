@@ -249,8 +249,11 @@ function setScene(scene, time) {
     return;
   }
 
-  var specifiedTime = !!time;
-  time = parseInt(time) || 1000;
+  var specifiedTime = time && time.length;
+  if(!specifiedTime)
+    time = 1000;
+  else
+    time = parseInt(time)
 
   var scene = assets.scene[scene];
   var currBackground = $('.background')
@@ -414,15 +417,16 @@ function condLine(condition, line) {
 }
 
 function centerText(operator, _, text) {
+  var time = text && text.length ? parseInt(text) : 1000
   switch(operator) {
   case "SET":
     $('#centerText').html(text);
     break;
   case "HIDE":
-    $('#centerText').fadeOut(parseInt(text) || 1000);
+    $('#centerText').fadeOut(time);
     break;
   case "SHOW":
-    $('#centerText').fadeIn(parseInt(text) || 1000);
+    $('#centerText').fadeIn(time);
     break;
   default: 
     showError("Invalid Operator",operator+" does not exist");
@@ -440,11 +444,12 @@ function waitMS(time) {
   }, time);
 }
 
-function toggleTextbox(visible) {
+function toggleTextbox(visible, time) {
+  var time = time && time.length ? parseInt(time) : 1000
   if(visible === 'HIDE')
-    $('.container').fadeOut(200);
+    $('.container').fadeOut(time);
   else if(visible === 'SHOW')
-    $('.container').fadeIn(200);
+    $('.container').fadeIn(time);
   else {
     showError("Invalid Input", "TEXTBOX requires SHOW or HIDE");
     return;
@@ -542,7 +547,7 @@ gameOperators = {
   "^EFFECT *([a-zA-Z0-9_]+)$": playEffect,
   "^GOTO *([a-zA-Z0-9_]+)$": gotoPoint,
   "^WAIT *(\\d+)$": waitMS,
-  "^TEXTBOX *(HIDE|SHOW)$": toggleTextbox,
+  "^TEXTBOX *(HIDE|SHOW) *(\\d+)?$": toggleTextbox,
   "^\\$(.*)$": evalLine,
   "^IF.*\\((.*)\\) *-> *(.+)$": condLine,
   "^CENTER *(HIDE|SHOW|SET) *(\"?(.*?)\"?)?$": centerText,
