@@ -41,6 +41,8 @@ body, html, #loadScreen, #errorScreen, #gameScreen, #characterBox, #backgroundBo
   display: flex;
   align-items: center;
   justify-content: center;
+  pointer-events: none;
+  background:none !important;
 }
 
 #centerTextBox #centerText {
