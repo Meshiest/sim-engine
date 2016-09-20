@@ -506,7 +506,7 @@ gameOperators = {
   "^WAIT *(\\d+)$": waitMS,
   "^TEXTBOX *(HIDE|SHOW)$": toggleTextbox,
   "^\\$(.*)$": evalLine,
-  "^IF.*(.*) *-> *(.+)$": condLine,
+  "^IF.*\\((.*)\\) *-> *(.+)$": condLine,
 }
 
 function nextLine() {

@@ -36,6 +36,7 @@ ENTER boy LEFT
 
 "Boy <%= ~~(Math.random()*20) %>": "Hello my name is ":boy: {numPlays}""
 $ %numPlays++
+IF (%numPlays > 2) -> GOTO afterBoyThing
 boy: "I'm made of cheese inside"
 boy: "I can teleport"@
 WAIT 2000
@@ -63,6 +64,7 @@ boy: "Magic!"
 EXIT boy
 WAIT 1000
 ENTER boy LEFT
+POINT afterBoyThing
 ENTER shark RIGHT
 shark: "I love you, player"
 you: "Um..."
