@@ -14,8 +14,11 @@ input, button, textarea, :focus {
     outline: none;
 }
 
-body, html, #loadScreen, #errorScreen, #gameScreen {
+body, html, #loadScreen, #errorScreen, #gameScreen, #characterBox, #backgroundBox, #centerTextBox, .background {
   overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
   margin: 0;
   padding: 0;
   width: 100vw;
@@ -32,6 +35,24 @@ body, html, #loadScreen, #errorScreen, #gameScreen {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+#centerTextBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#centerTextBox #centerText {
+  font-size: 2em;
+}
+
+#centerTextBox #centerText.large {
+  font-size: 4em;
+}
+
+#centerTextBox #centerText.small {
+  font-size: 1em;
 }
 
 #loadScreen #loadText {
@@ -58,7 +79,7 @@ body, html, #loadScreen, #errorScreen, #gameScreen {
   font-size: 1em;
 }
 
-#gameScreen {
+.background {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -158,9 +179,9 @@ body, html, #loadScreen, #errorScreen, #gameScreen {
   }
 }
 
-#textBox {
+#textBox, #centerTextBox {
   color: #fff;
-  text-shadow: 0 0 0.2em #000;
+  text-shadow: 0 0 0.3em #000;
 }
 
 #textBox #textName {

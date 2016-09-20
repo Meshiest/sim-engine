@@ -23,8 +23,8 @@ function showError(header, body) {
   $("#loadScreen").addClass('hidden');
   $("#gameScreen").addClass('hidden');
   $("#errorScreen").toggleClass('hidden');
-  $("#errorHeader").text(header);
-  $("#errorBody").text(body);
+  $("#errorHeader").html(header);
+  $("#errorBody").html(body + "\nLine "+currGameLine);
 }
 
 var assetTypes = {
@@ -215,7 +215,7 @@ function loadPoints(code) {
 }
 
 function loadText(text) {
-  $('#resourceName').text(text);
+  $('#resourceName').html(text);
 }
 
 var GAME_NAME = window.GAME_NAME = getUrlParameter("game");
@@ -243,13 +243,33 @@ $.ajax({
   }
 })
 
-function setScene(scene) {
+function setScene(scene, time) {
   if(!assets.scene[scene]) {
     showError("Scene Not Found", "Cannot find scene '" + scene + "'");
     return;
   }
+
+  var specifiedTime = !!time;
+  time = parseInt(time) || 1000;
+
   var scene = assets.scene[scene];
-  $('#gameScreen').attr('style', scene.style)
+  var currBackground = $('.background')
+
+  $('#backgroundBox').prepend(
+    $('<div class="background"/>')
+      .attr('style', scene.style)
+  )
+
+  if(currBackground) {
+    currBackground.fadeOut(time)
+    isWaiting = specifiedTime;
+    setTimeout(function() {
+      if(specifiedTime)
+        isWaiting = false;
+      currBackground.remove();
+    }, time);
+  }
+
   for(var name in gameStage) {
     exitCharacter(name, true);
   }
@@ -268,7 +288,7 @@ function enterCharacter(char, loc) {
     loc = loc.toLowerCase();
   }
   gameStage[char] = loc;
-  $('#gameScreen').prepend(
+  $('#characterBox').append(
     $('<div id="char" class="show-'+loc+'" char="' + char + '">')
       .attr('style', 'background-image: url('+assets.character[char].bust.image.src+')')
   )
@@ -313,8 +333,8 @@ function playEffect(effect) {
 }
 
 function sendMessage(name, message, autoNext) {
-  $('#textName').text(name);
-  $('#textBody').text(message);
+  $('#textName').html(name);
+  $('#textBody').html(message);
 
   if(autoNext)
     nextLine();
@@ -345,13 +365,13 @@ function showMenu(text) {
         line: match[2]
       })
     }
-    $('#boxName').text(text);
+    $('#boxName').html(text);
     var menu = $('#menuBox .menu');
     menu.empty()
 
     options.forEach(function(option, i) {
       var item = $('<li/>')
-        .text(option.text)
+        .html(option.text)
 
       item.attr('index', i)
 
@@ -391,6 +411,24 @@ function evalLine(line) {
 function condLine(condition, line) {
   if(eval(condition))
     interpretLine(line);
+}
+
+function centerText(operator, _, text) {
+  switch(operator) {
+  case "SET":
+    $('#centerText').html(text);
+    break;
+  case "HIDE":
+    $('#centerText').fadeOut(parseInt(text) || 1000);
+    break;
+  case "SHOW":
+    $('#centerText').fadeIn(parseInt(text) || 1000);
+    break;
+  default: 
+    showError("Invalid Operator",operator+" does not exist");
+    break;
+  }
+  nextLine();
 }
 
 function waitMS(time) {
@@ -498,7 +536,7 @@ gameOperators = {
   "^\"(.+?)\": *\"(.+?)\"(@)?$": sendMessage,
   "^ENTER *([a-zA-Z0-9_]+) *(LEFT|RIGHT|)?$": enterCharacter,
   "^EXIT *([a-zA-Z0-9_]+)$": exitCharacter,
-  "^SCENE *([a-zA-Z0-9_]+)$": setScene,
+  "^SCENE *([a-zA-Z0-9_]+) *(\d+)?$": setScene,
   "^MENU *\"(.+?)\"$": showMenu,
   "^MUSIC *([a-zA-Z0-9_]+)$": setMusic,
   "^EFFECT *([a-zA-Z0-9_]+)$": playEffect,
@@ -507,6 +545,7 @@ gameOperators = {
   "^TEXTBOX *(HIDE|SHOW)$": toggleTextbox,
   "^\\$(.*)$": evalLine,
   "^IF.*\\((.*)\\) *-> *(.+)$": condLine,
+  "^CENTER *(HIDE|SHOW|SET) *(\"?(.*?)\"?)?$": centerText,
 }
 
 function nextLine() {

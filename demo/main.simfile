@@ -27,6 +27,13 @@ $ %numPlays=1
 POINT start
 SCENE lake
 MUSIC school
+TEXTBOX HIDE 0
+CENTER SET "There was a boy"
+CENTER SHOW
+WAIT 2000
+TEXTBOX SHOW 2000
+CENTER HIDE 2000
+WAIT 2000
 ENTER boy LEFT
 
 # <%= "use the return value in the line" %>
@@ -79,7 +86,7 @@ POINT fuck
 MUSIC badass
 you: "Fuck me right here and now"
 MUSIC STOP
-SCENE black
+SCENE black 2000
 boy: "ok"
 GOTO start
 
