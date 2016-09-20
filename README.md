@@ -1,5 +1,7 @@
 ## Dating Sim Engine
 
+### [Documentation is found here](https://github.com/Meshiest/sim-engine/blob/master/DOC.md)
+
 To run without electron, start a python server in the sim-engine folder (`python -m SimpleHTTPServer`)
 
 Open `http://localhost:8000?game=GAME_FOLDER_NAME`
