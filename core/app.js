@@ -384,11 +384,13 @@ function gotoPoint(point) {
 }
 
 function evalLine(line) {
-  line = line.replace(/%[a-zA-Z0-9_]+/g, function(s){
-    return "gameVars['" + s.match(/%([a-zA-Z0-9_]+)/)[1] + "']";
-  });
   eval(line)
   nextLine();
+}
+
+function condLine(condition, line) {
+  if(eval(condition))
+    interpretLine(line);
 }
 
 function waitMS(time) {
@@ -427,6 +429,9 @@ function parseInput(text) {
   // {game variable}
   // :name:
 
+  text = text.replace(/%[a-zA-Z0-9_]+/g, function(s){
+    return "gameVars['" + s.match(/%([a-zA-Z0-9_]+)/)[1] + "']";
+  });
   text = text.replace(/<%=.+?%>/g, function(s){
     return eval(s.match(/<%=(.+?)%>/)[1])
   });
@@ -488,19 +493,20 @@ $('body').keydown(function(a){
 
 gameOperators = {
   // character operator
-  "^([a-zA-Z0-9_]+): \"(.+?)\"(@)?$": charMessage,
+  "^([a-zA-Z0-9_]+): *\"(.+?)\"(@)?$": charMessage,
   // narrator operator
-  "^\"(.+?)\": \"(.+?)\"(@)?$": sendMessage,
-  "^ENTER ([a-zA-Z0-9_]+) *(LEFT|RIGHT|)?$": enterCharacter,
-  "^EXIT ([a-zA-Z0-9_]+)$": exitCharacter,
-  "^SCENE ([a-zA-Z0-9_]+)$": setScene,
-  "^MENU \"(.+?)\"$": showMenu,
-  "^MUSIC ([a-zA-Z0-9_]+)$": setMusic,
-  "^EFFECT ([a-zA-Z0-9_]+)$": playEffect,
-  "^GOTO ([a-zA-Z0-9_]+)$": gotoPoint,
-  "^WAIT (\\d+)$": waitMS,
-  "^TEXTBOX (HIDE|SHOW)$": toggleTextbox,
+  "^\"(.+?)\": *\"(.+?)\"(@)?$": sendMessage,
+  "^ENTER *([a-zA-Z0-9_]+) *(LEFT|RIGHT|)?$": enterCharacter,
+  "^EXIT *([a-zA-Z0-9_]+)$": exitCharacter,
+  "^SCENE *([a-zA-Z0-9_]+)$": setScene,
+  "^MENU *\"(.+?)\"$": showMenu,
+  "^MUSIC *([a-zA-Z0-9_]+)$": setMusic,
+  "^EFFECT *([a-zA-Z0-9_]+)$": playEffect,
+  "^GOTO *([a-zA-Z0-9_]+)$": gotoPoint,
+  "^WAIT *(\\d+)$": waitMS,
+  "^TEXTBOX *(HIDE|SHOW)$": toggleTextbox,
   "^\\$(.*)$": evalLine,
+  "^IF.*(.*) *-> *(.+)$": condLine,
 }
 
 function nextLine() {
