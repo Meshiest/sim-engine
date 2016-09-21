@@ -66,8 +66,33 @@ var assetTypes = {
     name: "character",
     addFn: addCharacter,
   },
+  "^animation ([a-zA-Z0-9_]+) (.+)$":{
+    name: "animation",
+    addFn: addAnimation
+  }
 }
 
+function addAnimation(type, data){
+  var stream = {i:0, data:data[1]};
+  var len = stream.data.length;
+  var keyframe = new Gui.KeyFrame();
+  while(stream.i < len){
+    var token = canConsume(stream, AnimationRadix);
+    if(token.len != -1){
+      token.sym(token, stream, keyframe);
+    }else{
+      showError("Animation Parse Error","This shouldn't have happened: " + stream.data.substring(stream.i));
+      throw new Error();
+      break;
+    }
+  }
+  var obj = {
+    name: data[0],
+    loaded: true
+  };
+  return obj
+}
+  
 function addStyle(data) {
   $('head').append($('<link rel="stylesheet" type="text/css" href="'+GAME_NAME+'/'+data[0]+'" />'))
 }
@@ -172,6 +197,7 @@ var assets = {
   music: {},
   scene: {},
   character: {},
+  animation: {}
 };
 
 var numAssets = 0;
@@ -186,12 +212,10 @@ function finishLoadingAsset() {
 }
 
 function loadAssets(code) {
-  for(var i in code) {
+  for(var i = 0; i < code.length; ++i) {
     var line = code[i];
-
     if(!line.length)
       continue;
-
     for(var pattern in assetTypes) {
       var type = assetTypes[pattern];
       var regex = new RegExp(pattern);
@@ -205,7 +229,7 @@ function loadAssets(code) {
 }
 
 function loadPoints(code) {
-  for(var i in code) {
+  for(var i = 0; i < code.length; ++i) {
     var line = code[i];
     var match = line.match(/^POINT ([a-zA-Z0-9_]+)$/)
     if(match) {
