@@ -12,7 +12,7 @@ git-clone/
 ........background/
 .......... home for background images
 ........bust/
-.......... home for bust images
+.......... home for bust images and emotes
 ......audio/
 ........effect/
 .......... home for effect sounds
@@ -35,6 +35,13 @@ git-clone/
     * Backgrounds are scene images
   * `name` is what the asset will be called when used in characters or scenes
   * `filename` is the file in the path: `assets/[type]/[filename]`
+
+`image emote [name] [charName] [filename]`
+
+  * used with the `EMOTE [charName] [emoteName]`
+  * `charNae` is the character asset ame the emote is used with
+  * `filename` is the file in the path: `assets/bust/[filename]`
+
 
 `audio [type] [name] [filename]`
 
@@ -119,6 +126,12 @@ git-clone/
   * `characterName` is the `name` attribute of a `character` asset
   * `side` (optional) can be `LEFT`, `RIGHT`, or nothing (defaults to center)
 
+`EMOTE [characterName] [emote]`
+
+  * Sets a character image without removing the character
+  * Matched with `asset image emote [name] [charName] [fileName]`
+  * set `emote` to `NONE` to set the character back to default face
+
 `SCENE [sceneName] (transitionTimeMS)`
 
   * Sets the background to that of a `scene` asset with name `sceneName`
@@ -126,16 +139,17 @@ git-clone/
   * When `transitionTimeMS` is specified, the game halts progress until the animation is over
 
 ```
-MENU "(title)"
-  "(responseDisplay)" -> (line)
+MENU "[title]"
+  (numTimes)"[responseDisplay]" -> [line]
 ENDMENU
 ```
 
   * Option dialog where `title` is the question
   * `responseDisplay` is the display name for the option
   * `line` is the line to be run when the option is selected
+  * `numTimes` is a number of asterisks denoting how many times a choice may be picked. 0 means unlimited.
   * Example Lines:
-    `"Eat Apple" -> GOTO apple`
+    `**"Eat Apple" -> GOTO apple` -- can only be used twice because it has 2 asterisks
     `"Eat Dog" -> girl: "Don't eat my dog!"`
 
 `MUSIC [option]`
@@ -176,6 +190,34 @@ ENDMENU
   * Example:
     `IF (%charisma > 3) -> GOTO tipFedora`
 
-`$ javascript(%varname)`
+`MINIGAME name -> [line]`
 
+  * Refer to minigame scripting guide
+  * `line` is executed if the game win condition is triggered
+
+`$ javascript(%varname)`
   * Evaluates a line of javascript
+
+## Minigame Scripting
+
+Include a script with the `script [filename.js]` asset operator.
+
+The script should assign the `asset.minigame.MINIGAMENAME` variable to a function that returns a promise. Resolving this promise resembles a win, and rejecting resembles a lose. Winning will execute the 2nd half of the minigame operator. The `obj` parameter to the minigame function is the html element to place the gameinto
+
+```
+assets.minigame.demo = function(obj, gameVars) {
+  return new Promise(function(resolve, reject) {
+
+    // example canvas imports
+    obj.style.background = '#000000';
+    var canvas = $('<canvas/>');
+    $(obj).append(canvas);
+    var ctx = canvas[0].getContext('2d');
+
+    if(gameVars.shouldWin)
+      resolve(); // win minigame
+    else
+      reject(); // lose minigame
+  })
+}
+```

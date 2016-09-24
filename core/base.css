@@ -14,7 +14,7 @@ input, button, textarea, :focus {
     outline: none;
 }
 
-body, html, #loadScreen, #errorScreen, #gameScreen, #characterBox, #backgroundBox, #centerTextBox, .background {
+body, html, .fullScreen, #loadScreen, #errorScreen, #gameScreen, #characterBox, #backgroundBox, #centerTextBox, .background {
   overflow: hidden;
   position: absolute;
   top: 0;

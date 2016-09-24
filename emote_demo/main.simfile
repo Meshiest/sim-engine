@@ -1,0 +1,20 @@
+image bust base mario.png
+
+image emote green base luigi.png
+image emote purple base waluigi.png
+image emote yellow base wario.png
+
+character base base "Mario"
+
+scene black color #000000
+
+SCENE black
+ENTER base
+POINT start
+MENU "Select a color"
+  *"Red" -> EMOTE base NONE
+  ***"Green" -> EMOTE base green
+  *"Yellow" -> EMOTE base yellow
+  *"Purple" -> EMOTE base purple
+ENDMENU
+GOTO start

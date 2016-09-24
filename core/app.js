@@ -48,6 +48,11 @@ var assetTypes = {
     name: "bust",
     addFn: addImage,
   },
+  "^image emote ([a-zA-Z0-9_]+) ([a-zA-Z0-9_]+) (.+)$": {
+    path: "/image/bust/",
+    name: "emote",
+    addFn: addEmoteImage,
+  },
   "^audio effect ([a-zA-Z0-9_]+) (.+)$": {
     path: "/audio/effect/",
     name: "effect",
@@ -93,12 +98,33 @@ function addAnimation(type, data){
   return obj
 }
   
-function addStyle(data) {
-  $('head').append($('<link rel="stylesheet" type="text/css" href="'+GAME_NAME+'/'+data[0]+'" />'))
+function addStyle(type, data) {
+  numAssets ++;
+  var obj = document.createElement("style")
+  $('head').append(obj)
+
+  obj.rel = 'stylesheet'
+  obj.type ='text/css'
+  // onload will only be fired if defined before src
+  obj.onload = function() {
+    loadText(data[0]);
+    finishLoadingAsset();
+  };
+
+  obj.href = GAME_NAME + type.path + data[0];
 }
 
 function addScript(type, data) {
-  $('body').append($('<script/>').attr('src', data))
+  numAssets ++;
+  var obj = document.createElement("script")
+  $('#scripts').append(obj)
+  // onload will only be fired if defined before src
+  obj.onload = function() {
+    loadText(data[0]);
+    finishLoadingAsset();
+  };
+
+  obj.src = GAME_NAME + type.path + data[0];
 }
 
 function addMusic(type, data) {
@@ -161,6 +187,28 @@ function addImage(type, data) {
   return obj;
 }
 
+var charEmotes = {};
+function addEmoteImage(type, data) {
+  if(!charEmotes[data[1]])
+    charEmotes[data[1]] = {};
+
+  numAssets ++;
+  var obj = {
+    name: data[0],
+    char: data[1],
+    image: new Image(),
+    loaded: false
+  };
+  
+  obj.image.src = GAME_NAME + '/assets' + type.path + data[2];
+  obj.image.addEventListener("load", function() {
+    obj.loaded = true;
+    loadText(data[2]);
+    finishLoadingAsset();
+  }, true);
+  charEmotes[obj.char][obj.name] = obj;
+}
+
 function addCharacter(type, data) {
   if(!assets.bust[data[1]]) {
     showError("Failed Adding Character","Invalid file '"+data[1]+"' in '" + data.join(" ") + "'");
@@ -197,7 +245,9 @@ var assets = {
   music: {},
   scene: {},
   character: {},
-  animation: {}
+  animation: {},
+  emote: {},
+  minigame: {},
 };
 
 var numAssets = 0;
@@ -206,7 +256,7 @@ var numLoadedAssets = 0;
 function finishLoadingAsset() {
   numLoadedAssets ++;
   console.log('Loaded',numLoadedAssets,'/',numAssets)
-  if(numLoadedAssets == numAssets) {
+  if(numLoadedAssets >= numAssets) {
     startGame();
   }
 }
@@ -222,7 +272,9 @@ function loadAssets(code) {
       var matches = line.match(regex);
       if(matches) {
         matches.splice(0, 1);
-        assets[type.name][matches[0]] = type.addFn(type, matches);
+        var asset = type.addFn(type, matches);
+        if(typeof asset !== 'undefined')
+          assets[type.name][matches[0]] = asset;
       }
     }
   }
@@ -338,6 +390,24 @@ function exitCharacter(char, noNext) {
     nextLine();
 }
 
+function emoteChar(char, emote) {
+  if(!charEmotes[char][emote] && emote !== "NONE") {
+    showError("Error setting emote", "Emote "+emote+" is invalid");
+    return;
+  }
+
+  var loc = gameStage[char];
+  if(!loc) {
+    showError("Error setting emote", "Character not on screen");
+    return;
+  }
+  var image = emote === "NONE" ? assets.character[char].bust : charEmotes[char][emote]
+
+  var char = $("#char[char='"+char+"']")
+      .attr('style', 'background-image: url('+image.image.src+')')
+  nextLine();
+}
+
 var currMusic = undefined;
 function setMusic(music) {
   if(currMusic) {
@@ -378,19 +448,23 @@ function charMessage(char, message, autoNext) {
   sendMessage(getDisplayName(char), message, autoNext);
 }
 
+var menuItemStats = {}
 function showMenu(text) {
   var line = parseInput(gameCode[++currGameLine]);
   var options = [];
   while(!line.match(/^ENDMENU$/)) {
-    var match = line.match(/^\"(.+?)\" *-> *(.+)$/);
+    menuItemStats[currGameLine-1] |= 0;
+    var match = line.match(/^(\**)\"(.+?)\" *-> *(.+)$/);
     if(!match) {
       showError("Invalid Menu Option", line)
       return;
     } else {
-      options.push({
-        text: match[1],
-        line: match[2]
-      })
+      if(!match[1].length || match[1].length && menuItemStats[currGameLine-1] < match[1].length)
+        options.push({
+          text: match[2],
+          line: match[3],
+          lineNum: currGameLine - 1,
+        })
     }
     $('#boxName').html(text);
     var menu = $('#menuBox .menu');
@@ -411,17 +485,23 @@ function showMenu(text) {
       })
 
       item.click(function(){
-        $('#textBox').removeClass('hidden')
-        $('#menuBox').addClass('hidden')
-        interpretLine(option.line)
+        $('#textBox').removeClass('hidden');
+        $('#menuBox').addClass('hidden');
+        menuItemStats[option.lineNum] ++;
+        interpretLine(option.line);
       })
       $('#menuBox .menu').append(item)
     })
 
-    $('#textBox').addClass('hidden')
-    $('#menuBox').removeClass('hidden')
 
     line = parseInput(gameCode[++currGameLine]);
+  }
+
+  if(options.length) {
+    $('#textBox').addClass('hidden')
+    $('#menuBox').removeClass('hidden')
+  } else {
+    nextLine();
   }
 }
 
@@ -522,6 +602,34 @@ function startGame() {
   nextLine();
 }
 
+function loadMinigame(name, line) {
+  if(!assets.minigame[name]) {
+    showError("Error loading minigame", "Can't find "+name);
+    return;
+  }
+  var screen = $('<div id="minigame" class="fullScreen"/>')
+  screen.hide();
+  isWaiting = true;
+  $('body').append(screen)
+  screen.fadeIn(500);
+
+  var removeScreen = function(scr){
+    scr.fadeOut(500);
+    setTimeout(function(){
+      scr.remove();
+      isWaiting = false;
+    }, 500);
+  };
+
+  assets.minigame[name](screen[0], gameVars).then(function(val){
+    removeScreen(screen);
+    interpretLine(line);
+  }).catch(function(){
+    removeScreen(screen);
+    nextLine();
+  });
+}
+
 var selectIndex = -1;
 $('body').keydown(function(a){
   var key = a.keyCode;
@@ -563,18 +671,20 @@ gameOperators = {
   "^([a-zA-Z0-9_]+): *\"(.+?)\"(@)?$": charMessage,
   // narrator operator
   "^\"(.+?)\": *\"(.+?)\"(@)?$": sendMessage,
-  "^ENTER *([a-zA-Z0-9_]+) *(LEFT|RIGHT|)?$": enterCharacter,
-  "^EXIT *([a-zA-Z0-9_]+)$": exitCharacter,
-  "^SCENE *([a-zA-Z0-9_]+) *(\d+)?$": setScene,
+  "^ENTER +([a-zA-Z0-9_]+) *(LEFT|RIGHT|)?$": enterCharacter,
+  "^EXIT +([a-zA-Z0-9_]+)$": exitCharacter,
+  "^SCENE +([a-zA-Z0-9_]+) *(\d+)?$": setScene,
   "^MENU *\"(.+?)\"$": showMenu,
-  "^MUSIC *([a-zA-Z0-9_]+)$": setMusic,
-  "^EFFECT *([a-zA-Z0-9_]+)$": playEffect,
-  "^GOTO *([a-zA-Z0-9_]+)$": gotoPoint,
+  "^MUSIC +([a-zA-Z0-9_]+)$": setMusic,
+  "^EFFECT +([a-zA-Z0-9_]+)$": playEffect,
+  "^GOTO +([a-zA-Z0-9_]+)$": gotoPoint,
   "^WAIT *(\\d+)$": waitMS,
-  "^TEXTBOX *(HIDE|SHOW) *(\\d+)?$": toggleTextbox,
+  "^EMOTE +([a-zA-Z0-9_]+) +([a-zA-Z0-9_]+)$": emoteChar,
+  "^TEXTBOX +(HIDE|SHOW) *(\\d+)?$": toggleTextbox,
   "^\\$(.*)$": evalLine,
-  "^IF.*\\((.*)\\) *-> *(.+)$": condLine,
-  "^CENTER *(HIDE|SHOW|SET) *(\"?(.*?)\"?)?$": centerText,
+  "^IF *\\((.*)\\) *-> *(.+)$": condLine,
+  "^CENTER +(HIDE|SHOW|SET) +(\"?(.*?)\"?)?$": centerText,
+  "^MINIGAME *([a-zA-Z0-9_]+) *-> *(.+)$": loadMinigame,
 }
 
 function nextLine() {
