@@ -48,6 +48,11 @@ var assetTypes = {
     name: "bust",
     addFn: addImage,
   },
+  "^image emote ([a-zA-Z0-9_]+) ([a-zA-Z0-9_]+) (.+)$": {
+    path: "/image/bust/",
+    name: "emote",
+    addFn: addEmoteImage,
+  },
   "^audio effect ([a-zA-Z0-9_]+) (.+)$": {
     path: "/audio/effect/",
     name: "effect",
@@ -161,6 +166,29 @@ function addImage(type, data) {
   return obj;
 }
 
+var charEmotes = {};
+function addEmoteImage(type, data) {
+  if(!charEmotes[data[1]])
+    charEmotes[data[1]] = {};
+
+  numAssets ++;
+  var obj = {
+    name: data[0],
+    char: data[1],
+    image: new Image(),
+    loaded: false
+  };
+  
+  obj.image.src = GAME_NAME + '/assets' + type.path + data[2];
+  obj.image.addEventListener("load", function() {
+    obj.loaded = true;
+    loadText(data[2]);
+    finishLoadingAsset();
+  }, true);
+  charEmotes[obj.char][obj.name] = obj;
+  return obj;
+}
+
 function addCharacter(type, data) {
   if(!assets.bust[data[1]]) {
     showError("Failed Adding Character","Invalid file '"+data[1]+"' in '" + data.join(" ") + "'");
@@ -197,7 +225,8 @@ var assets = {
   music: {},
   scene: {},
   character: {},
-  animation: {}
+  animation: {},
+  emote: {}
 };
 
 var numAssets = 0;
@@ -336,6 +365,24 @@ function exitCharacter(char, noNext) {
 
   if(!noNext)
     nextLine();
+}
+
+function emoteChar(char, emote) {
+  if(!charEmotes[char][emote] && emote !== "NONE") {
+    showError("Error setting emote", "Emote "+emote+" is invalid");
+    return;
+  }
+
+  var loc = gameStage[char];
+  if(!loc) {
+    showError("Error setting emote", "Character not on screen");
+    return;
+  }
+  var image = emote === "NONE" ? assets.character[char].bust : charEmotes[char][emote]
+
+  var char = $("#char[char='"+char+"']")
+      .attr('style', 'background-image: url('+image.image.src+')')
+  nextLine();
 }
 
 var currMusic = undefined;
@@ -563,18 +610,19 @@ gameOperators = {
   "^([a-zA-Z0-9_]+): *\"(.+?)\"(@)?$": charMessage,
   // narrator operator
   "^\"(.+?)\": *\"(.+?)\"(@)?$": sendMessage,
-  "^ENTER *([a-zA-Z0-9_]+) *(LEFT|RIGHT|)?$": enterCharacter,
-  "^EXIT *([a-zA-Z0-9_]+)$": exitCharacter,
-  "^SCENE *([a-zA-Z0-9_]+) *(\d+)?$": setScene,
+  "^ENTER +([a-zA-Z0-9_]+) *(LEFT|RIGHT|)?$": enterCharacter,
+  "^EXIT +([a-zA-Z0-9_]+)$": exitCharacter,
+  "^SCENE +([a-zA-Z0-9_]+) *(\d+)?$": setScene,
   "^MENU *\"(.+?)\"$": showMenu,
-  "^MUSIC *([a-zA-Z0-9_]+)$": setMusic,
-  "^EFFECT *([a-zA-Z0-9_]+)$": playEffect,
-  "^GOTO *([a-zA-Z0-9_]+)$": gotoPoint,
+  "^MUSIC +([a-zA-Z0-9_]+)$": setMusic,
+  "^EFFECT +([a-zA-Z0-9_]+)$": playEffect,
+  "^GOTO +([a-zA-Z0-9_]+)$": gotoPoint,
   "^WAIT *(\\d+)$": waitMS,
-  "^TEXTBOX *(HIDE|SHOW) *(\\d+)?$": toggleTextbox,
+  "^EMOTE +([a-zA-Z0-9_]+) +([a-zA-Z0-9_]+)$": emoteChar,
+  "^TEXTBOX +(HIDE|SHOW) *(\\d+)?$": toggleTextbox,
   "^\\$(.*)$": evalLine,
-  "^IF.*\\((.*)\\) *-> *(.+)$": condLine,
-  "^CENTER *(HIDE|SHOW|SET) *(\"?(.*?)\"?)?$": centerText,
+  "^IF *\\((.*)\\) *-> *(.+)$": condLine,
+  "^CENTER +(HIDE|SHOW|SET) +(\"?(.*?)\"?)?$": centerText,
 }
 
 function nextLine() {

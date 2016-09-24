@@ -12,7 +12,7 @@ git-clone/
 ........background/
 .......... home for background images
 ........bust/
-.......... home for bust images
+.......... home for bust images and emotes
 ......audio/
 ........effect/
 .......... home for effect sounds
@@ -35,6 +35,13 @@ git-clone/
     * Backgrounds are scene images
   * `name` is what the asset will be called when used in characters or scenes
   * `filename` is the file in the path: `assets/[type]/[filename]`
+
+`image emote [name] [charName] [filename]`
+
+  * used with the `EMOTE [charName] [emoteName]`
+  * `charNae` is the character asset ame the emote is used with
+  * `filename` is the file in the path: `assets/bust/[filename]`
+
 
 `audio [type] [name] [filename]`
 
@@ -118,6 +125,12 @@ git-clone/
   * Can **not** display a character in two different locations at the same time
   * `characterName` is the `name` attribute of a `character` asset
   * `side` (optional) can be `LEFT`, `RIGHT`, or nothing (defaults to center)
+
+`EMOTE [characterName] [emote]`
+
+  * Sets a character image without removing the character
+  * Matched with `asset image emote [name] [charName] [fileName]`
+  * set `emote` to `NONE` to set the character back to default face
 
 `SCENE [sceneName] (transitionTimeMS)`
 
