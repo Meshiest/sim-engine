@@ -609,6 +609,7 @@ function loadMinigame(name, line) {
   }
   var screen = $('<div id="minigame" class="fullScreen"/>')
   screen.hide();
+  isWaiting = true;
   $('body').append(screen)
   screen.fadeIn(500);
 
@@ -616,6 +617,7 @@ function loadMinigame(name, line) {
     scr.fadeOut(500);
     setTimeout(function(){
       scr.remove();
+      isWaiting = false;
     }, 500);
   };
 
