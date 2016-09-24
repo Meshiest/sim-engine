@@ -139,16 +139,17 @@ git-clone/
   * When `transitionTimeMS` is specified, the game halts progress until the animation is over
 
 ```
-MENU "(title)"
-  "(responseDisplay)" -> (line)
+MENU "[title]"
+  (numTimes)"[responseDisplay]" -> [line]
 ENDMENU
 ```
 
   * Option dialog where `title` is the question
   * `responseDisplay` is the display name for the option
   * `line` is the line to be run when the option is selected
+  * `numTimes` is a number of asterisks denoting how many times a choice may be picked. 0 means unlimited.
   * Example Lines:
-    `"Eat Apple" -> GOTO apple`
+    `**"Eat Apple" -> GOTO apple` -- can only be used twice because it has 2 asterisks
     `"Eat Dog" -> girl: "Don't eat my dog!"`
 
 `MUSIC [option]`

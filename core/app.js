@@ -448,19 +448,23 @@ function charMessage(char, message, autoNext) {
   sendMessage(getDisplayName(char), message, autoNext);
 }
 
+var menuItemStats = {}
 function showMenu(text) {
   var line = parseInput(gameCode[++currGameLine]);
   var options = [];
   while(!line.match(/^ENDMENU$/)) {
-    var match = line.match(/^\"(.+?)\" *-> *(.+)$/);
+    menuItemStats[currGameLine-1] |= 0;
+    var match = line.match(/^(\**)\"(.+?)\" *-> *(.+)$/);
     if(!match) {
       showError("Invalid Menu Option", line)
       return;
     } else {
-      options.push({
-        text: match[1],
-        line: match[2]
-      })
+      if(!match[1].length || match[1].length && menuItemStats[currGameLine-1] < match[1].length)
+        options.push({
+          text: match[2],
+          line: match[3],
+          lineNum: currGameLine - 1,
+        })
     }
     $('#boxName').html(text);
     var menu = $('#menuBox .menu');
@@ -481,17 +485,23 @@ function showMenu(text) {
       })
 
       item.click(function(){
-        $('#textBox').removeClass('hidden')
-        $('#menuBox').addClass('hidden')
-        interpretLine(option.line)
+        $('#textBox').removeClass('hidden');
+        $('#menuBox').addClass('hidden');
+        menuItemStats[option.lineNum] ++;
+        interpretLine(option.line);
       })
       $('#menuBox .menu').append(item)
     })
 
-    $('#textBox').addClass('hidden')
-    $('#menuBox').removeClass('hidden')
 
     line = parseInput(gameCode[++currGameLine]);
+  }
+
+  if(options.length) {
+    $('#textBox').addClass('hidden')
+    $('#menuBox').removeClass('hidden')
+  } else {
+    nextLine();
   }
 }
 

@@ -12,9 +12,9 @@ SCENE black
 ENTER base
 POINT start
 MENU "Select a color"
-  "Red" -> EMOTE base NONE
-  "Green" -> EMOTE base green
-  "Yellow" -> EMOTE base yellow
-  "Purple" -> EMOTE base purple
+  *"Red" -> EMOTE base NONE
+  ***"Green" -> EMOTE base green
+  *"Yellow" -> EMOTE base yellow
+  *"Purple" -> EMOTE base purple
 ENDMENU
 GOTO start
