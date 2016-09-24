@@ -189,6 +189,34 @@ ENDMENU
   * Example:
     `IF (%charisma > 3) -> GOTO tipFedora`
 
-`$ javascript(%varname)`
+`MINIGAME name -> [line]`
 
+  * Refer to minigame scripting guide
+  * `line` is executed if the game win condition is triggered
+
+`$ javascript(%varname)`
   * Evaluates a line of javascript
+
+## Minigame Scripting
+
+Include a script with the `script [filename.js]` asset operator.
+
+The script should assign the `asset.minigame.MINIGAMENAME` variable to a function that returns a promise. Resolving this promise resembles a win, and rejecting resembles a lose. Winning will execute the 2nd half of the minigame operator. The `obj` parameter to the minigame function is the html element to place the gameinto
+
+```
+assets.minigame.demo = function(obj, gameVars) {
+  return new Promise(function(resolve, reject) {
+
+    // example canvas imports
+    obj.style.background = '#000000';
+    var canvas = $('<canvas/>');
+    $(obj).append(canvas);
+    var ctx = canvas[0].getContext('2d');
+
+    if(gameVars.shouldWin)
+      resolve(); // win minigame
+    else
+      reject(); // lose minigame
+  })
+}
+```

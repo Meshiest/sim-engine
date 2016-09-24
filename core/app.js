@@ -98,12 +98,33 @@ function addAnimation(type, data){
   return obj
 }
   
-function addStyle(data) {
-  $('head').append($('<link rel="stylesheet" type="text/css" href="'+GAME_NAME+'/'+data[0]+'" />'))
+function addStyle(type, data) {
+  numAssets ++;
+  var obj = document.createElement("style")
+  $('head').append(obj)
+
+  obj.rel = 'stylesheet'
+  obj.type ='text/css'
+  // onload will only be fired if defined before src
+  obj.onload = function() {
+    loadText(data[0]);
+    finishLoadingAsset();
+  };
+
+  obj.href = GAME_NAME + type.path + data[0];
 }
 
 function addScript(type, data) {
-  $('body').append($('<script/>').attr('src', data))
+  numAssets ++;
+  var obj = document.createElement("script")
+  $('#scripts').append(obj)
+  // onload will only be fired if defined before src
+  obj.onload = function() {
+    loadText(data[0]);
+    finishLoadingAsset();
+  };
+
+  obj.src = GAME_NAME + type.path + data[0];
 }
 
 function addMusic(type, data) {
@@ -186,7 +207,6 @@ function addEmoteImage(type, data) {
     finishLoadingAsset();
   }, true);
   charEmotes[obj.char][obj.name] = obj;
-  return obj;
 }
 
 function addCharacter(type, data) {
@@ -226,7 +246,8 @@ var assets = {
   scene: {},
   character: {},
   animation: {},
-  emote: {}
+  emote: {},
+  minigame: {},
 };
 
 var numAssets = 0;
@@ -235,7 +256,7 @@ var numLoadedAssets = 0;
 function finishLoadingAsset() {
   numLoadedAssets ++;
   console.log('Loaded',numLoadedAssets,'/',numAssets)
-  if(numLoadedAssets == numAssets) {
+  if(numLoadedAssets >= numAssets) {
     startGame();
   }
 }
@@ -251,7 +272,9 @@ function loadAssets(code) {
       var matches = line.match(regex);
       if(matches) {
         matches.splice(0, 1);
-        assets[type.name][matches[0]] = type.addFn(type, matches);
+        var asset = type.addFn(type, matches);
+        if(typeof asset !== 'undefined')
+          assets[type.name][matches[0]] = asset;
       }
     }
   }
@@ -569,6 +592,32 @@ function startGame() {
   nextLine();
 }
 
+function loadMinigame(name, line) {
+  if(!assets.minigame[name]) {
+    showError("Error loading minigame", "Can't find "+name);
+    return;
+  }
+  var screen = $('<div id="minigame" class="fullScreen"/>')
+  screen.hide();
+  $('body').append(screen)
+  screen.fadeIn(500);
+
+  var removeScreen = function(scr){
+    scr.fadeOut(500);
+    setTimeout(function(){
+      scr.remove();
+    }, 500);
+  };
+
+  assets.minigame[name](screen[0], gameVars).then(function(val){
+    removeScreen(screen);
+    interpretLine(line);
+  }).catch(function(){
+    removeScreen(screen);
+    nextLine();
+  });
+}
+
 var selectIndex = -1;
 $('body').keydown(function(a){
   var key = a.keyCode;
@@ -623,6 +672,7 @@ gameOperators = {
   "^\\$(.*)$": evalLine,
   "^IF *\\((.*)\\) *-> *(.+)$": condLine,
   "^CENTER +(HIDE|SHOW|SET) +(\"?(.*?)\"?)?$": centerText,
+  "^MINIGAME *([a-zA-Z0-9_]+) *-> *(.+)$": loadMinigame,
 }
 
 function nextLine() {

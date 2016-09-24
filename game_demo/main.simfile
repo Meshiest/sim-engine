@@ -1,0 +1,15 @@
+script assets/game/demo/game.js
+style assets/game/demo/game.css
+
+scene black color #dddddd
+
+SCENE black
+POINT start
+
+$ %variable=0;
+
+talk: "Next to start game"
+MINIGAME demo -> talk: "You played the game"
+talk: "You set variable to {variable}"
+
+GOTO start
