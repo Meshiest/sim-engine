@@ -348,6 +348,7 @@ TEXTBOX HIDE
 MINIGAME stack -> $ %nextGoto = %win
 MUSIC jazz
 TEXTBOX SHOW
+IF(%nextGoto != %win) -> SCENE office
 IF(%nextGoto != %win) -> GOTO <%= %nextGoto %>
 ENTER cougar
 cougar: "<%= ['Thanks hun ;) you sure delivered my package', 'my delivery came almost as fast as I will','is there a hole in that box?','I got a box for you ;)'][%cougarMsg] %>"
