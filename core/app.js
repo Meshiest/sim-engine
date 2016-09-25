@@ -702,6 +702,11 @@ gameOperators = {
   "^MINIGAME *([a-zA-Z0-9_]+) *-> *(.+)$": loadMinigame,
 }
 
+function clickNextLine() {
+  if(window.errorShown || isWaiting)
+    return;
+}
+
 function nextLine() {
   if(window.errorShown)
     return;
