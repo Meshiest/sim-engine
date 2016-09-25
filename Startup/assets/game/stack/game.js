@@ -15334,8 +15334,23 @@ assets.minigame.stack = (function () {
   function GameWorld() {
     this.canvas = create("canvas", "stacker-canvas");
     this.ctx = this.canvas.getContext("2d");
-    this.width = this.canvas.width = superObj.clientWidth;
-    this.height = this.canvas.height = superObj.clientHeight;
+    var mt = 0;
+    if (IS_HIGH_DEF) {
+      mt = 1;
+    }
+    var w = superObj.clientWidth,
+      h = superObj.clientHeight;
+    this.canvas.width = w << mt;
+    this.canvas.height = h << mt;
+    this.width = w;
+    this.height = h;
+    this.canvas.style.width = w + "px";
+    this.canvas.style.height = h + "px";
+    console.log(this.canvas.style.width);
+    if (IS_HIGH_DEF) 
+      this.ctx.scale(2, 2);
+
+    this.canvas.s
     this.last = 0;
     this.boxes = [];
     this.fake = {
@@ -15354,6 +15369,8 @@ assets.minigame.stack = (function () {
     this.epscore = create("span", 0, "0");
     this.enscore = create("span", 0, "0");
     this.eascore = create("span", 0, "0");
+    this.dx = 0;
+    this.dy = 0;
     this.agoal = 8;
     this.goal = create("span", 0, "" + this.agoal);
     this.time = create("span", 0, "20");
@@ -15369,14 +15386,16 @@ assets.minigame.stack = (function () {
                                  append(create("div", 0), [create("span", 0, "Delivered: "), this.eascore, create("span", 0, "/"), this.goal]),
                                  append(create("div", 0, "Hours Left: "), this.time)
                                 ])]);
-    bind(["update", "click", "move"], this);
-    window.addEventListener("click", this.click);
+    bind(["update", "click", "move", "resize"], this);
+    window.addEventListener("mousedown", this.click);
+    window.addEventListener("touchstart", this.click);
     window.addEventListener("mousemove", this.move);
+    window.addEventListener("resize", this.resize);
   }
 
   GameWorld.prototype.draw = function () {
     var ctx = this.ctx;
-    ctx.clearRect(0, 0, this.width, this.height);
+    ctx.clearRect(0, 0, this.width, this.height + this.dy);
     ctx.save();
     this.at = (this.at + (-this.highest + (this.height >> 1))) >> 1;
     ctx.translate(0, this.at);
@@ -15384,8 +15403,8 @@ assets.minigame.stack = (function () {
       b[i].draw(ctx);
     }
     if (this.can && !this.gameOver) {
-      ctx.translate(this.fake.x, this.fake.y);
-      ctx.drawImage(loadList[this.fake.i].img, -this.fake.w >> 1, -this.fake.h >> 1);
+      ctx.translate(this.fake.x, this.fake.y + (this.dy >> 1));
+      ctx.drawImage(loadList[this.fake.i].img, -this.fake.w >> 1, -this.fake.h >> 1, this.fake.w, this.fake.h);
       //ctx.fillRect(this.fake.x - this.fake.w / 2, this.fake.y - this.fake.h / 2, this.fake.w, this.fake.h);
     }
     ctx.restore();
@@ -15399,6 +15418,24 @@ assets.minigame.stack = (function () {
     this.fake.x = x;
   };
 
+  GameWorld.prototype.resize = function (e) {
+    var mt = 0;
+    if (IS_HIGH_DEF) {
+      mt = 1;
+    }
+    var w = window.innerWidth,
+      h = window.innerHeight;
+    this.canvas.width = (w << mt) + "";
+    this.canvas.height = (h << mt) + "";
+    this.canvas.style.width = (w) + "px";
+    this.canvas.style.height = (h) + "px";
+    if (IS_HIGH_DEF) 
+      this.ctx.scale(2, 2);
+    this.dx += w - this.width;
+    this.dy = h - this.height;
+    this.width = w;
+  };
+
   GameWorld.prototype.click = function (e) {
     if (!this.can || this.gameOver)
       return;
@@ -15406,7 +15443,7 @@ assets.minigame.stack = (function () {
       y = e.clientY || e.pageY;
     this.canAt = Date.now() + 1200;
     this.can = false;
-    game.boxes.push(new Box(world, x, this.highest - 200, this.fake.w >> 1, this.fake.h >> 1, false, loadList[this.fake.i].img));
+    game.boxes.push(new Box(world, x - (this.dx >> 1), this.highest - 200, this.fake.w >> 1, this.fake.h >> 1, false, loadList[this.fake.i].img));
     this.eascore.innerHTML = ++this.ascore;
     this.epscore.innerHTML = ++this.pscore;
 
@@ -15417,8 +15454,10 @@ assets.minigame.stack = (function () {
     this.scorebox = null;
     this.cavnas = null;
     this.ctx = null;
-    window.removeEventListener("click", this.click);
+    window.removeEventListener("touchstart", this.click);
+    window.removeEventListener("mousedown", this.click);
     window.removeEventListener("mousemove", this.move);
+    window.removeEventListener("resize", this.resize);
     loaded = {};
 
   };
@@ -15512,17 +15551,18 @@ assets.minigame.stack = (function () {
       h2 = h >> 1;
     if (pt.y - h2 < game.height) {
       ctx.save();
-      ctx.translate(pt.x, pt.y);
+      ctx.translate(pt.x + (game.dx >> 1), pt.y + (game.dy >> 1));
       if (rot)
         ctx.rotate(rot);
       if (!this.img) {
         ctx.fillRect(-w2, -h2, w, h);
       } else {
-        ctx.drawImage(this.img, -w2, -h2);
+        ctx.drawImage(this.img, -w2, -h2, w, h);
       }
     }
     ctx.restore();
   };
+  var IS_HIGH_DEF = ((window.matchMedia && (window.matchMedia('only screen and (min-resolution: 124dpi), only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 48.8dpcm)').matches || window.matchMedia('only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 2.6/2), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (min-device-pixel-ratio: 1.3)').matches)) || (window.devicePixelRatio && window.devicePixelRatio > 1.3));
 
   var style = `
     .stacker-canvas{
@@ -15574,6 +15614,10 @@ assets.minigame.stack = (function () {
           w: img.clientWidth,
           h: img.clientHeight
         };
+        if (IS_HIGH_DEF) {
+          o.w >>= 1;
+          o.h >>= 1;
+        }
         --loadNum;
         if (loadSpecs[2]) {
           loadList[numBoxes++] = o;
@@ -15589,12 +15633,17 @@ assets.minigame.stack = (function () {
     img.src = loadSpecs[1];
   }
 
-  var toLoad = [["platform", GAME_NAME + "/assets/game/stack/image/platform.png", false], ["box1", GAME_NAME + "/assets/game/stack/image/box1.png", true], ["box2", "./stack_game/assets/game/stack/image/box2.png", true], ["box3", "./stack_game/assets/game/stack/image/box3.png", true], ["box4", "./stack_game/assets/game/stack/image/box4.png", true], ["box5", "./stack_game/assets/game/stack/image/box5.png", true]],
+  var toLoad = null,
     loaded = {},
     loadNum = 0,
     loadList = null,
     numBoxes = 0;
   style = create("style", 0, style);
+  if (IS_HIGH_DEF) {
+    toLoad = [["platform", GAME_NAME + "/assets/game/stack/image/platform_2x.png", false], ["box1", GAME_NAME + "/assets/game/stack/image/box1_2x.png", true], ["box2", GAME_NAME + "/assets/game/stack/image/box2_2x.png", true], ["box3", GAME_NAME + "/assets/game/stack/image/box3_2x.png", true], ["box4", GAME_NAME + "/assets/game/stack/image/box4_2x.png", true], ["box5", GAME_NAME + "/assets/game/stack/image/box5_2x.png", true]];
+  } else {
+    toLoad = [["platform", GAME_NAME + "/assets/game/stack/image/platform.png", false], ["box1", GAME_NAME + "/assets/game/stack/image/box1.png", true], ["box2", GAME_NAME + "/assets/game/stack/image/box2.png", true], ["box3", GAME_NAME + "/assets/game/stack/image/box3.png", true], ["box4", GAME_NAME + "/assets/game/stack/image/box4.png", true], ["box5", GAME_NAME + "/assets/game/stack/image/box5.png", true]];
+  }
   var game, world, superObj, superGame;
 
   function StackingGame(obj, getGame) {
