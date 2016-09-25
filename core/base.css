@@ -234,7 +234,7 @@ body, html, .fullScreen, #loadScreen, #errorScreen, #gameScreen, #characterBox, 
   list-style-type: none;
   transition: background-color 0.5s, box-shadow 0.5s;
   background-color: rgba(0, 0, 0, 0.15);
-  padding: 0.5em;
+  padding: 0.4em;
 }
 
 #menuBox .menu li:nth-child(2) {
