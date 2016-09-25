@@ -412,7 +412,7 @@ GOTO game2done
 
 POINT ups2
 $ %win = "usps2win"
-$ %loss = "usps2loss"
+$ %loss = "ups2loss"
 GOTO stackMinigame
 
 POINT ups2win
@@ -601,7 +601,6 @@ $ %numplays=0
 GOTO game3
 
 POINT game3
-$ %gametype
 
 MENU "Time for the final game."
 	*"USPS" -> GOTO uspsgame3
@@ -622,7 +621,6 @@ $ %uspsscore--
 GOTO uspsfinal
 
 POINT tempuspswin
-MUSIC jazz
 $ %uspsscore++
 GOTO uspsfinal
 
@@ -685,7 +683,6 @@ $ %upsscore--
 GOTO upsfinal
 
 POINT tempupswin
-MUSIC jazz
 $ %upsscore++
 GOTO upsfinal
 
@@ -754,7 +751,6 @@ $ %fedexscore--
 GOTO fedexfinal
 
 POINT tempWinFedex
-MUSIC jazz
 $ %fedexscore++
 GOTO fedexfinal
 
@@ -821,7 +817,6 @@ $ %dhlscore--
 GOTO dhlfinal
 
 POINT tempwindhl
-MUSIC jazz
 $ %dhlscore++
 GOTO dhlfinal
 
@@ -878,8 +873,6 @@ dhl: "Well I won all of your silly games, so we both know who your choice is gon
 EXIT dhl
 IF (%numplays==4) ->GOTO cancer
 GOTO game3
-
-
 
 
 POINT cancer
