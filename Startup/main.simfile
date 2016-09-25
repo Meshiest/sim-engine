@@ -263,8 +263,6 @@ dhl: "Nah. lions are more badass."
 EXIT dhl
 GOTO game1done
 
-
-
 POINT fedex1
 MUSIC pipe
 MINIGAME pipe ->GOTO fedex1win

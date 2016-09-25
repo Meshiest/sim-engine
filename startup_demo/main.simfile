@@ -1,5 +1,6 @@
 script assets/game/pipe/game.js
 script assets/game/race/game.js
+script assets/game/stack/game.js
 style assets/game/pipe/game.css
 
 image bust fedex fedex.png
@@ -18,6 +19,7 @@ fedex: "Hello! Thanks for demoing our game!"
 MENU "What game do you want to demo?"
   "Delivery Puzzle" -> GOTO puzzle
   "Review Service" -> GOTO review
+  "Stack Game" -> GOTO stack
 ENDMENU
 
 POINT puzzle
@@ -34,6 +36,17 @@ MENU "Choose your company"
 ENDMENU
 
 MINIGAME race -> fedex: "You won!"
+GOTO end
+
+POINT stack
+EXIT fedex
+TEXTBOX HIDE
+$ %win = 0
+MINIGAME stack -> $ %win = 1
+TEXTBOX SHOW
+ENTER fedex RIGHT
+IF(%win) -> fedex: "You won!"
+GOTO end
 
 POINT end
 fedex: "Thanks for playing!"
