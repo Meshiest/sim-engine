@@ -660,6 +660,7 @@ $('body').keydown(function(a){
   var KEY_UP = 38;
 
   if((key == ENTER_KEY || key == SPACE_KEY) && !menu) {
+    event.preventDefault();
     nextLine();
   }
 
@@ -675,6 +676,7 @@ $('body').keydown(function(a){
       selectIndex --;
     }
     if((key == ENTER_KEY || key == SPACE_KEY) && selectIndex >= 0) {
+      event.preventDefault();
       $('.menu li[index="' + selectIndex + '"]').click();
       selectIndex = -1;
     }
@@ -705,6 +707,7 @@ gameOperators = {
 function clickNextLine() {
   if(window.errorShown || isWaiting)
     return;
+  nextLine();
 }
 
 function nextLine() {
