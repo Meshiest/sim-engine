@@ -169,6 +169,14 @@ assets.minigame.race = function(obj, game) {
       ctx.fillStyle = "#0f0"
       ctx.fillText(currWord.substring(0, progress), -strWidth/2, 0);
     } else {
+      ctx.font = "50px Tahoma"
+      ctx.textBaseline = "top";
+      ctx.fillStyle = "#000";
+      var text = "A+D to aim, Space to post review!"
+      ctx.fillText(text, 11, 11)
+      ctx.fillStyle = "#fff";
+      ctx.fillText(text, 10, 10)
+
       ctx.translate(w/2, h/2);
     }
 
