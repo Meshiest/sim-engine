@@ -462,8 +462,10 @@ function showMenu(text) {
   var options = [];
   while(!line.match(/^ENDMENU$/)) {
     menuItemStats[currGameLine-1] |= 0;
-    if(!line)
+    if(!line) {
+      line = parseInput(gameCode[++currGameLine]);
       continue;
+    }
     var match = line.match(/^(\**)\"(.+?)\" *-> *(.+)$/);
     if(!match) {
       showError("Invalid Menu Option", line)
