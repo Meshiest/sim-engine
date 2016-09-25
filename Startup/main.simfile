@@ -358,7 +358,6 @@ SCENE office
 GOTO <%= %nextGoto %>
 
 POINT usps2win
-MUSIC jazz
 $ %numplays++
 $ %uspsgame2=1
 IF (%fedexgame2 + %upsgame2 + %dhlgame2 <1) ->GOTO usps2firstwin
@@ -416,7 +415,6 @@ $ %loss = "ups2loss"
 GOTO stackMinigame
 
 POINT ups2win
-MUSIC jazz
 $ %numplays++
 $ %upsgame2=1
 IF (%fedexgame2 + %uspsgame2 + %dhlgame2 <1) ->GOTO ups2firstwin
@@ -430,7 +428,6 @@ EXIT ups
 GOTO game2
 
 POINT ups2loss
-MUSIC jazz
 $ %numplays++
 $ %upsgame2=-1
 IF (%upsscore==1) ->GOTO ups2tie
@@ -473,7 +470,6 @@ $ %loss = "dhl2loss"
 GOTO stackMinigame
 
 POINT dhl2win
-MUSIC jazz
 $ %numplays++
 $ %dhlgame2=1
 IF (%fedexgame2 + %upsgame2 + %uspsgame2 <1) ->GOTO dhl2firstwin
@@ -486,7 +482,6 @@ EXIT dhl
 GOTO game2
 
 POINT dhl2loss
-MUSIC jazz
 $ %numplays++
 $ %dhlgame2=-1
 IF (%dhlscore==1) ->GOTO dhl2tie
@@ -538,7 +533,6 @@ $ %loss = "fedex2loss"
 GOTO stackMinigame
 
 POINT fedex2win
-MUSIC jazz
 $ %numplays++
 $ %fedexgame2=1
 IF (%uspsgame2 + %upsgame2 + %dhlgame2 <1) ->GOTO fedex2firstwin
@@ -552,7 +546,6 @@ EXIT fedex
 GOTO game2
 
 POINT fedex2loss
-MUSIC jazz
 $ %numplays++
 $ %fedexgame2=-1
 IF (%fedexscore==1) ->GOTO fedex2tie
