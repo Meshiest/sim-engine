@@ -1,5 +1,5 @@
 console.log('Example log showing that this script is loaded')
-
+ 
 assets.minigame.demo = function(obj, game) {
   obj.style.background = '#000000';
   var canvas = $('<canvas id="demoGame"></canvas>');
