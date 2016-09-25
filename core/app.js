@@ -302,7 +302,7 @@ function loadText(text) {
   $('#resourceName').html(text);
 }
 
-var GAME_NAME = window.GAME_NAME = 'Startup' // getUrlParameter("game");
+var GAME_NAME = window.GAME_NAME = getUrlParameter("game");
 
 if(!GAME_NAME) {
   showError("No Game Set", "use '?game=[gamename] to specify where to load the game from");
