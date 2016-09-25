@@ -298,7 +298,7 @@ GOTO game1
 POINT fedex1firstwin
 IF (%numplays==4) -> GOTO lastplayfedex1
 ENTER fedex RIGHT
-fedex: "Hey, I beat the rest office them. They didn't even try yet, you should just hire me."
+fedex: "Hey, I beat the rest of them. They didn't even try yet, you should just hire me."
 you: "Now now <i>kitten</i>, would that be fair to the others to just let you win?"
 fedex: "But I'm the best."
 you: "Then give the others time to prove that."
