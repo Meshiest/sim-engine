@@ -288,6 +288,14 @@ function loadPoints(code) {
       gamePoints[match[1]] = i;
     }
   }
+  for(var i = 0; i < code.length; ++i) {
+    var line = code[i];
+    var match = line.match(/^GOTO ([a-zA-Z0-9_]+)$/)
+    if(match && !gamePoints[match[1]]) {
+      showError("Non existent point", match[1])
+      return;
+    }
+  }
 }
 
 function loadText(text) {
@@ -506,6 +514,9 @@ function showMenu(text) {
 }
 
 function gotoPoint(point) {
+  if(!gamePoints[point]) {
+    showError("Point doesn't exist", point)
+  }
   currGameLine = gamePoints[point];
   nextLine();
 }
@@ -518,6 +529,8 @@ function evalLine(line) {
 function condLine(condition, line) {
   if(eval(condition))
     interpretLine(line);
+  else
+    nextLine();
 }
 
 function centerText(operator, _, text) {
@@ -688,6 +701,8 @@ gameOperators = {
 }
 
 function nextLine() {
+  if(window.errorShown)
+    return;
   currGameLine ++;
   if(currGameLine >= gameCode.length) {
     console.log("not sure how to handle the end of the game")
@@ -705,7 +720,12 @@ function interpretLine(rawLine) {
     var matches = line.match(regex);
     if(matches) {
       matches.splice(0, 1);
-      fn(...matches);
+      try {
+        fn(...matches);
+      } catch (err) {
+        console.log(err, currGameLine)
+        showError("Error in code", err)
+      }
       return;
     }
   }

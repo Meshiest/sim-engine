@@ -1,0 +1,59 @@
+script assets/game/pipe/game.js
+script assets/game/race/game.js
+script assets/game/stack/game.js
+style assets/game/pipe/game.css
+
+image bust fedex fedex.png
+image background sky sky.png
+
+scene sky background sky
+scene black color #000
+character fedex fedex "Fiona"
+
+POINT start
+SCENE sky
+ENTER fedex RIGHT
+
+fedex: "Hello! Thanks for demoing our game!"
+
+MENU "What game do you want to demo?"
+  "Delivery Puzzle" -> GOTO puzzle
+  "Review Service" -> GOTO review
+  "Stack Game" -> GOTO stack
+ENDMENU
+
+POINT puzzle
+MINIGAME pipe -> fedex: "You won!"
+GOTO end
+
+POINT review
+
+MENU "Choose your company"
+  "DHL" -> $ %gameType="dhl"
+  "USPS" -> $ %gameType="usps"
+  "UPS" -> $ %gameType="ups"
+  "FedEx" -> $ %gameType="fedex"
+ENDMENU
+
+MINIGAME race -> fedex: "You won!"
+GOTO end
+
+POINT stack
+EXIT fedex
+TEXTBOX HIDE
+$ %win = 0
+MINIGAME stack -> $ %win = 1
+TEXTBOX SHOW
+ENTER fedex RIGHT
+IF(%win) -> fedex: "You won!"
+GOTO end
+
+POINT end
+fedex: "Thanks for playing!"
+fedex: "Please check out the actual game!"
+
+TEXTBOX HIDE
+SCENE black
+WAIT 1000
+TEXTBOX SHOW
+GOTO start
