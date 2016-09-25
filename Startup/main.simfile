@@ -1,14 +1,14 @@
 #assets
 script assets/game/pipe/game.js
 script assets/game/race/game.js
+script assets/game/stack/game.js
 style assets/game/pipe/game.css
-
-$ assets.minigame.stacking = assets.minigame.pipe
 
 image bust fedex fedex.png
 image bust fedexloss fedexloss.png
 
 image bust cougar cougar.png
+image bust amazon amazon.png
 
 image bust ups ups.png
 image bust upsloss upsloss.png
@@ -24,6 +24,7 @@ image bust boxb boxb.png
 image bust boxc boxc.png
 
 image background house house.png
+image background sky sky.png
 image background office office.png
 
 audio music pipe pipe.mp3
@@ -34,6 +35,7 @@ audio music jazz Jazz.mp3
 scene black color #000000
 scene office background office
 scene mailbox background house
+scene sky background sky
 
 
 character usps usps "Portia"
@@ -44,6 +46,13 @@ character ups ups "Uma"
 character upsloss ups "Uma"
 character dhl dhl "Danielle"
 character dhlloss dhl "Danielle"
+character cougar cougar "Karen"
+character amazon amazon "Prime"
+
+
+$ assets.music.stack.audio.loop = false;
+
+POINT start
 
 $ %uspsgame1=0
 $ %dhlgame1=0
@@ -55,11 +64,11 @@ $ %uspsscore=0
 $ %dhlscore=0
 $ %fedexscore=0
 $ %upsscore=0
+$ %cougarMsg = 0
 
-
-POINT start
 SCENE office
 MUSIC jazz
+
 ENTER usps RIGHT
 
 usps: "Hey there. You're James Gam aren't you? The CEO of that new company GSC."
@@ -321,7 +330,7 @@ $ %numplays=0
 GOTO game2
 
 POINT game2
-MENU "Who shall play stacking now?"
+MENU "Who shall play stack now?"
 	*"USPS" ->GOTO usps2
 	*"UPS" ->GOTO ups2
 	*"FedEx" ->GOTO fedex2
@@ -329,9 +338,26 @@ MENU "Who shall play stacking now?"
 ENDMENU
 
 POINT usps2
+$ %win = "usps2win"
+$ %loss = "usps2loss"
+GOTO stackMinigame
+
+POINT stackMinigame
+$ %nextGoto = %loss
+SCENE mailbox
 MUSIC stack
-MINIGAME stacking -> GOTO usps2win
-GOTO usps2loss
+TEXTBOX HIDE
+MINIGAME stack -> $ %nextGoto = %win
+MUSIC jazz
+TEXTBOX SHOW
+IF(%nextGoto != %win) -> GOTO <%= %nextGoto %>
+ENTER cougar
+cougar: "<%= ['Thanks hun ;) you sure delivered my package', 'my delivery came almost as much as I did','is there a hole in that box?','I got a box for you ;)'][%cougarMsg] %>"
+$ %cougarMsg ++
+you: "um. ok."
+EXIT cougar
+SCENE office
+GOTO <%= %nextGoto %>
 
 POINT usps2win
 MUSIC jazz
@@ -387,9 +413,9 @@ GOTO game2done
 
 
 POINT ups2
-MUSIC stack
-MINIGAME stacking -> GOTO ups2win
-GOTO ups2loss
+$ %win = "usps2win"
+$ %loss = "usps2loss"
+GOTO stackMinigame
 
 POINT ups2win
 MUSIC jazz
@@ -444,9 +470,9 @@ GOTO game2done
 
 
 POINT dhl2
-MUSIC stack
-MINIGAME stacking -> GOTO dhl2win
-GOTO dhl2loss
+$ %win = "dhl2win"
+$ %loss = "dhl2loss"
+GOTO stackMinigame
 
 POINT dhl2win
 MUSIC jazz
@@ -509,9 +535,9 @@ GOTO game2done
 
 
 POINT fedex2
-MUSIC stack
-MINIGAME stacking -> GOTO fedex2win
-GOTO fedex2loss
+$ %win = "fedex2win"
+$ %loss = "fedex2loss"
+GOTO stackMinigame
 
 POINT fedex2win
 MUSIC jazz
@@ -877,7 +903,14 @@ you: "odd?"
 you: "No."
 you: "Prime!"
 you: "I'll call it Amazon.."
+SCENE sky
+ENTER amazon
 you: "Amazon Prime!"
+TEXTBOX HIDE
+WAIT 2000
+TEXTBOX SHOW
+EXIT amazon
+SCENE office
 GOTO gameOver
 
 POINT uspswin
@@ -918,9 +951,9 @@ you: "..."
 POINT gameOver
 talk: "Thanks for playing."
 talk: "We'd like to thank some very special people for their contributions."
-talk: "Isaac Hirschfeld - Engine creation, Head programmer, team leader"
+talk: "Isaac Hirschfeld - Engine creation, Head programmer, Project Leader"
 talk: "Steph Oro - Programmer"
-talk: "Tarin Nuamchareon, Katie Bryant, Sen Holmes, Izzy - Artists"
+talk: "Tarin Nuamchareon, Katie Bryant, Sen Holmes, Izzy, Kristen Buglio - Artists"
 talk: "PJ Lobello, Brad Tylutki, Jamie Shamilan - Musical Artists"
 talk: "Burns - Head Story Writer"
 talk: "Mecks Copeland - Snack Runner"
@@ -930,7 +963,6 @@ SCENE black
 talk: "Thanks for playing."
 MUSIC STOP
 TEXTBOX HIDE
-CENTER SET ":)"
-CENTER SHOW
 WAIT 5000
+TEXTBOX SHOW
 GOTO start
