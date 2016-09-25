@@ -381,6 +381,7 @@ POINT lastplayusps2
 ENTER usps RIGHT
 usps: "I might've been last that round, but I did win."
 you: "That you did little bird. That you did."
+EXIT usps
 GOTO game2done
 
 
