@@ -601,6 +601,7 @@ $ %numplays=0
 GOTO game3
 
 POINT game3
+SCENE office
 
 MENU "Time for the final game."
 	*"USPS" -> GOTO uspsgame3
