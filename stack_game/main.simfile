@@ -6,7 +6,8 @@ scene black color #dddddd
 SCENE black
 POINT start
 
-$ %variable=0;
+$ %timelimit=22;
+$ %goalboxes=5;
 
 talk: "Next to start game"
 MINIGAME stack -> talk: "You played the game"
