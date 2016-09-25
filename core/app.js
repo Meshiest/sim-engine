@@ -462,6 +462,8 @@ function showMenu(text) {
   var options = [];
   while(!line.match(/^ENDMENU$/)) {
     menuItemStats[currGameLine-1] |= 0;
+    if(!line)
+      continue;
     var match = line.match(/^(\**)\"(.+?)\" *-> *(.+)$/);
     if(!match) {
       showError("Invalid Menu Option", line)
@@ -720,6 +722,7 @@ function interpretLine(rawLine) {
     var matches = line.match(regex);
     if(matches) {
       matches.splice(0, 1);
+      console.log(currGameLine, line, rawLine, matches)
       try {
         fn(...matches);
       } catch (err) {

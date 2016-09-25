@@ -105,10 +105,10 @@ assets.minigame.pipe = function(obj, game) {
           move.sY = vert ? -1 : 0;
           move.eY = vert ? 1 : 0;
         } else {
-          move.sX = Math.floor(Math.random() * 2) * 2 - 1
-          move.eX = 0;
-          move.sY = 0;
-          move.eY = Math.floor(Math.random() * 2) * 2 - 1
+          move.sX = 0;
+          move.eX = Math.floor(Math.random() * 2) * 2 - 1;
+          move.sY = Math.floor(Math.random() * 2) * 2 - 1
+          move.eY = 0;
         }
         grid[x][y] = move;
         
@@ -161,11 +161,11 @@ assets.minigame.pipe = function(obj, game) {
     }
 
     var curr = grid[0][start]
-    if(curr.sX != -1)
+    if(curr.sX != -1 && curr.eX != -1)
       return false;
     while(curr && !curr.valid) {
       curr.valid = true;
-      if(curr.x == 3 && curr.y == end && curr.eY == 0 && curr.eX == 1){
+      if(curr.x == 3 && curr.y == end && curr.eY == 0 && (curr.eX == 1 || curr.sX == 1)){
         return true;
       }
       curr = getNext(curr);
@@ -194,7 +194,7 @@ assets.minigame.pipe = function(obj, game) {
     checkMoves();
   }
 
-  for(var i = 0; i < (game.numPipeMoves || 5) || checkMoves(); i++) {
+  for(var i = 0; i < (game.numPipeMoves || 15) || checkMoves(); i++) {
     var pos = Math.floor(Math.random() * 4);
     if(Math.random() < 0.5) {
       shift(pos, 3, true)  
@@ -221,9 +221,23 @@ assets.minigame.pipe = function(obj, game) {
     ctx.textAlign = "right"
     ctx.textBaseline = "top"
     ctx.fillStyle = "#000";
+    console.log('ok')
     ctx.fillText(hours + " hour"+(hours == 1 ? "" : "s")+" before shipment", w - 9, 11);
     ctx.fillStyle = "#fff";
     ctx.fillText(hours + " hour"+(hours == 1 ? "" : "s")+" before shipment", w - 10, 10);
+    ctx.textAlign = "left";
+    ctx.fillStyle = "#000";
+    ctx.fillText("Plan the shipping route!", 11, 11);
+    ctx.fillStyle = "#fff";
+    ctx.fillText("Plan the shipping route!", 10, 10);
+    ctx.font="20px Tahoma"
+    ctx.fillStyle = "#000";
+    ctx.textBaseline = "bottom"
+    ctx.fillText("Click outside of the grid to shift a row or column", 11, h-9);
+    ctx.fillStyle = "#fff";
+    ctx.fillText("Click outside of the grid to shift a row or column", 10, h-10);
+
+
 
     var minDim = Math.min(w,h);
     var part = minDim/4 * 0.75;

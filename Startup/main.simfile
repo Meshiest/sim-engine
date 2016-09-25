@@ -39,13 +39,13 @@ scene sky background sky
 
 
 character usps usps "Portia"
-character uspsloss usps "Portia"
+character uspsloss uspsloss "Portia"
 character fedex fedex "Fiona"
-character fedexloss fedex "Fiona"
+character fedexloss fedexloss "Fiona"
 character ups ups "Uma"
-character upsloss ups "Uma"
+character upsloss upsloss "Uma"
 character dhl dhl "Danielle"
-character dhlloss dhl "Danielle"
+character dhlloss dhlloss "Danielle"
 character cougar cougar "Karen"
 character amazon amazon "Prime"
 
@@ -81,7 +81,7 @@ you: "Well, there's no need to flatter me. However, since I'll only be using the
 fedex: "Who else is there to consider when FedEx is right infront of you?"
 EXIT usps
 ENTER ups RIGHT
-ups: "Well, there's me. I'm ups."
+ups: "Well, there's me. I'm UPS."
 EXIT fedex
 ENTER dhl LEFT
 dhl: "And me, DHL. As if I would compete to impress you though."
@@ -90,7 +90,7 @@ EXIT dhl
 EXIT ups
 
 POINT game1
-MENU "Choose who you wish to test."
+MENU "Choose who you wish to test in preparing shipments."
 	*"USPS" -> GOTO usps1
 	*"UPS" -> GOTO ups1
 	*"FedEx" -> GOTO fedex1
@@ -290,7 +290,7 @@ ENTER fedexloss RIGHT
 fedex: "NO NO NO! I CAN'T LOSE I JUST CAN'T."
 you: "Calm down <i>Sweet Kitten</i>. There will be plenty of time for redemption."
 fedex: "I don't want redemption, I WANT TO WIN NOW!"
-you: "Well, kitten, you will need to be patient."
+you: "Well, <i>kitten</i>, you will need to be patient."
 EXIT fedexloss
 IF (%numplays==4) -> GOTO game1done
 GOTO game1
@@ -299,7 +299,7 @@ POINT fedex1firstwin
 IF (%numplays==4) -> GOTO lastplayfedex1
 ENTER fedex RIGHT
 fedex: "Hey, I beat the rest office them. They didn't even try yet, you should just hire me."
-you: "Now now kitten, would that be fair to the others to just let you win?"
+you: "Now now <i>kitten</i>, would that be fair to the others to just let you win?"
 fedex: "But I'm the best."
 you: "Then give the others time to prove that."
 EXIT fedex
@@ -308,9 +308,9 @@ GOTO game1
 POINT lastplayfedex1
 ENTER fedex RIGHT
 fedex: "Since I went last, that means I win doesn't it?"
-you: "How would that work kitten?"
+you: "How would that work <i>kitten</i>?"
 fedex: "Well if any of the others were good enough, you would have just made them the winners straight away, so I never would have played."
-you: "Oh, but kitten, that wouldn't have been fair. And that's what this is all about."
+you: "Oh, but <i>kitten</i>, that wouldn't have been fair. And that's what this is all about."
 EXIT fedex
 GOTO game1done
 
@@ -328,7 +328,7 @@ $ %numplays=0
 GOTO game2
 
 POINT game2
-MENU "Who shall play stack now?"
+MENU "Who shall demonstrate expertise in delivering packages?"
 	*"USPS" ->GOTO usps2
 	*"UPS" ->GOTO ups2
 	*"FedEx" ->GOTO fedex2
@@ -350,7 +350,7 @@ MUSIC jazz
 TEXTBOX SHOW
 IF(%nextGoto != %win) -> GOTO <%= %nextGoto %>
 ENTER cougar
-cougar: "<%= ['Thanks hun ;) you sure delivered my package', 'my delivery came almost as much as I did','is there a hole in that box?','I got a box for you ;)'][%cougarMsg] %>"
+cougar: "<%= ['Thanks hun ;) you sure delivered my package', 'my delivery came almost as fast as I will','is there a hole in that box?','I got a box for you ;)'][%cougarMsg] %>"
 $ %cougarMsg ++
 you: "um. ok."
 EXIT cougar
@@ -403,7 +403,7 @@ GOTO game2
 POINT lastplayusps2
 ENTER usps RIGHT
 usps: "I might've been last that round, but I did win."
-you: "That you did little bird. That you did."
+you: "That you did <i>Little Bird</i>. That you did."
 EXIT usps
 GOTO game2done
 
@@ -452,7 +452,7 @@ POINT ups2firstwin
 IF (%numplays==4) ->GOTO lastplayups2
 ENTER ups RIGHT
 ups: "I knew I could do it."
-you: "That wasn't too bad, was it duck."
+you: "That wasn't too bad, was it <i>duck</i>."
 ups: "Not for me. I'd like to see those other companies do as well as I did."
 EXIT ups
 GOTO game2
@@ -461,7 +461,6 @@ POINT lastplayups2
 ENTER ups RIGHT
 ups: "Last but not least, I must be the best. I'll beat the next one two."
 GOTO game2done
-
 
 
 POINT dhl2
@@ -476,7 +475,7 @@ IF (%fedexgame2 + %upsgame2 + %uspsgame2 <1) ->GOTO dhl2firstwin
 IF (%numplays==4) -> GOTO lastplaydhl2
 ENTER dhl RIGHT
 dhl: "I won that one! But, ya know, it doesn't matter. I don't have to prove anything to you."
-you: "Oh you don't lion? Then why waste the time here?"
+you: "Oh you don't <i>Lion</i>? Then why waste the time here?"
 dhl: "Oh, I mean...Well...shut up. I'll do whatever I want."
 EXIT dhl
 GOTO game2
@@ -490,7 +489,7 @@ dhl: "Fuckety fucking fuck."
 you: "woah. Kids might be playing this game."
 dhl: "what game?"
 you: "Nevermind. Just try and watch your language a bit. Sheesh."
-dhl: "Well that challenge was bullshit and you know it. That was unwinable."
+dhl: "Well that challenge was bullshit and you know it. That was LITERALLY UNPLAYABLE."
 you: "Now a sore attitude like that is going to get you nowhere."
 dhl: "Like I give a fuck."
 EXIT dhlloss
@@ -539,7 +538,7 @@ IF (%uspsgame2 + %upsgame2 + %dhlgame2 <1) ->GOTO fedex2firstwin
 IF (%numplays==4) -> GOTO lastplayfedex2
 ENTER fedex RIGHT
 fedex: "I won the second round! Thats gotta mean I get the job right?"
-you: "No, my dear kitten, there is still another round."
+you: "No, my dear <i>kitten</i>, there is still another round."
 fedex: "But whyyyyy? You know I'm the best for your company."
 you: "I can't be sure of that just yet. One more challenge before I can know."
 EXIT fedex
@@ -562,8 +561,8 @@ POINT fedex2tie
 ENTER fedex RIGHT
 fedex: "Well, I won the last round. That should have to count right?"
 you: "It does, but you lost this."
-fedex: "But...but I'm the best. I'm your kitten."
-you: "Yes kitten, but is that worth my company?"
+fedex: "But...but I'm the best. I'm your <i>kitten</i>."
+you: "Yes <i>kitten</i>, but is that worth my company?"
 EXIT fedex
 IF (%numplays==4) -> GOTO game2done
 GOTO game2
@@ -658,7 +657,7 @@ GOTO game3
 POINT winAllusps
 ENTER usps RIGHT
 usps: "I DID IT! I DID IT! I DID IT!"
-you: "I'm so proud of you. You've really proven yourself little bird."
+you: "I'm so proud of you. You've really proven yourself <i>Little Bird</i>."
 usps: "So I get the job now?"
 you: "Just give me a moment to consider every option."
 EXIT usps
@@ -693,9 +692,9 @@ GOTO ohShit
 POINT lossAllups
 ENTER upsloss RIGHT
 ups: "Triple damn."
-you: "duck, what happened? I thought you said you could be the shipping service I needed."
+you: "<i>duck</i>, what happened? I thought you said you could be the shipping service I needed."
 ups: "I tried my best, I really did."
-you: "Well, I'm afraid it just wasn't enough. I'm sorry duck"
+you: "Well, I'm afraid it just wasn't enough. I'm sorry <i>duck</i>"
 EXIT upsloss
 IF (%numplays==4) ->GOTO cancer
 GOTO game3
@@ -703,9 +702,9 @@ GOTO game3
 
 POINT lossMostups
 ENTER upsloss RIGHT
-you: "Duck, you only won one game."
+you: "<i>Duck</i>, you only won one game."
 ups: "Was that the last one? I thought I'd get another chance."
-you: "No duck, you don't. I can't have you as my shipping company, you just aren't good enough."
+you: "No <i>duck</i>, you don't. I can't have you as my shipping company, you just aren't good enough."
 EXIT upsloss
 IF (%numplays==4) ->GOTO cancer
 GOTO game3
@@ -717,7 +716,7 @@ ENTER ups RIGHT
 ups: "Hey, I won two."
 you: "Yes you did, and I'm very proud of you. You're one of the top contenders."
 ups: "Contenders? Is there another test?"
-you: "No duck, I just need to make my decision on my own. If you'll give me a moment to finish up with all the others."
+you: "No <i>duck</i>, I just need to make my decision on my own. If you'll give me a moment to finish up with all the others."
 EXIT ups
 IF (%numplays==4) ->GOTO cancer
 GOTO game3
@@ -763,7 +762,7 @@ ENTER fedexloss RIGHT
 fedex: "Oh poo. I failed you."
 you: "I wish I could disagree, but you did."
 fedex: "Well those silly competitions didn't matter. You can still pick me right?"
-you: "No kitten I can't. You just aren't good enough for my company."
+you: "No <i>kitten</i> I can't. You just aren't good enough for my company."
 EXIT fedexloss
 IF (%numplays==4) ->GOTO cancer
 GOTO game3
@@ -773,7 +772,7 @@ POINT lossMostfedex
 ENTER fedexloss RIGHT
 you: "I thought you said you were the best? One out of three isn't the best."
 fedex: "Those challenges were too hard."
-you: "I don't hear the other competitors complaining so much. I think I'm going to have to let you go kitten. You just can't keep up with what I need."
+you: "I don't hear the other competitors complaining so much. I think I'm going to have to let you go <i>kitten</i>. You just can't keep up with what I need."
 EXIT fedexloss
 IF (%numplays==4) ->GOTO cancer
 GOTO game3
@@ -782,7 +781,7 @@ GOTO game3
 POINT winMostfedex
 ENTER fedex RIGHT
 fedex: "I won two! I must be better than those others right?"
-you: "You did excellently kitten. I still have to choose between you all, which I don't look forward to."
+you: "You did excellently <i>kitten</i>. I still have to choose between you all, which I don't look forward to."
 fedex: "I'm sure you'll choose right. If you know what I mean..."
 EXIT fedex
 IF (%numplays==4) ->GOTO cancer
@@ -792,9 +791,9 @@ GOTO game3
 POINT winAllfedex
 ENTER fedex RIGHT
 fedex: "HA! I told you I was the best."
-you: "You did do fantastically kitten."
+you: "You did do fantastically <i>kitten</i>."
 fedex: "You shouldn't have even wasted your time with this silly competition, when we both know who the real winner has been the whole time."
-you: "We'll see about that kitten."
+you: "We'll see about that <i>kitten</i>."
 EXIT fedex
 IF (%numplays==4) ->GOTO cancer
 GOTO game3
@@ -828,9 +827,9 @@ POINT lossAlldhl
 MUSIC jazz
 ENTER dhlloss RIGHT
 dhl: "Well fuck."
-you: "Brave lion you.."@
+you: "<i>Brave lion</i> you.."@
 WAIT 500
-dhl: "Don't brave lion me. Fuck you and fuck this. I'm out of here."
+dhl: "Don't <i>Brave Lion</i> me. Fuck you and fuck this. I'm out of here."
 EXIT dhlloss
 IF (%numplays==4) ->GOTO cancer
 GOTO game3
@@ -901,7 +900,7 @@ GOTO gameOver
 POINT uspswin
 ENTER usps RIGHT
 usps: "*gasp* You chose me?"
-you: "Yes my little bird, I did. You truely proved yourself, and your personality really won me over."
+you: "Yes my <i>Little Bird</i>, I did. You truely proved yourself, and your personality really won me over."
 usps: "Oh thank you so much. I won't let you down I promise"
 GOTO gameOver
 
@@ -909,16 +908,16 @@ GOTO gameOver
 POINT upswin
 ENTER ups RIGHT
 ups: "You chose me? I won't disappoint I promise."
-you: "I expect nothing less duck."
+you: "I expect nothing less <i>duck</i>."
 GOTO gameOver
 
 
 POINT dhlwin
 ENTER dhl RIGHT
 dhl: "I won!?"
-you: "Yes you did my brave lion. Your personality along with your skills have proven you wil be an excellent match for my company."
+you: "Yes you did my <i>brave lion</i>. Your personality along with your skills have proven you wil be an excellent match for my company."
 dhl: "Yes! I mean, Yeah whatever, of course. Glad I could do business with you."
-you: "I'm proud of you. My brave lion."
+you: "I'm proud of you. My <i>brave lion</i>."
 dhl: "Thanks. My antelope."
 GOTO gameOver
 
@@ -926,8 +925,8 @@ GOTO gameOver
 POINT fedexwin
 ENTER fedex RIGHT
 fedex: "I told you all along I was the best."
-you: "Yes kitten, I suppose I should have just trusted you."
-fedex: "You should've puddin. Would've saved us all a lot of time."
+you: "Yes <i>kitten</i>, I suppose I should have just trusted you."
+fedex: "You should've puddin'. Would've saved us all a lot of time."
 GOTO gameOver
 
 POINT ohShit

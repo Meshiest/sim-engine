@@ -224,6 +224,19 @@ assets.minigame.pipe = function(obj, game) {
     ctx.fillText(hours + " hour"+(hours == 1 ? "" : "s")+" before shipment", w - 9, 11);
     ctx.fillStyle = "#fff";
     ctx.fillText(hours + " hour"+(hours == 1 ? "" : "s")+" before shipment", w - 10, 10);
+    ctx.textAlign = "left";
+    ctx.fillStyle = "#000";
+    ctx.fillText("Plan the shipping route!", 11, 11);
+    ctx.fillStyle = "#fff";
+    ctx.fillText("Plan the shipping route!", 10, 10);
+    ctx.font="20px Tahoma"
+    ctx.fillStyle = "#000";
+    ctx.textBaseline = "bottom"
+    ctx.fillText("Click outside of the grid to shift a row or column", 11, h-9);
+    ctx.fillStyle = "#fff";
+    ctx.fillText("Click outside of the grid to shift a row or column", 10, h-10);
+
+
 
     var minDim = Math.min(w,h);
     var part = minDim/4 * 0.75;
